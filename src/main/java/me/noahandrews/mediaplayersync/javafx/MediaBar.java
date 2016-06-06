@@ -36,9 +36,6 @@ import javafx.util.Duration;
 
 import java.io.File;
 
-/**
- * Created by noah on 6/4/2016.
- */
 public class MediaBar extends HBox {
     private Media media;
     private MediaPlayer mediaPlayer;
