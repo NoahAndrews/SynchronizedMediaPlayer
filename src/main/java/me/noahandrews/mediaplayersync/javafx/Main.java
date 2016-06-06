@@ -26,9 +26,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
         primaryStage.setTitle("Synchronized media player");
 
         MediaControl mediaControl = new MediaControl();
@@ -42,6 +44,8 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(event -> exit());
     }
 
     private MenuBar getMenuBar() {
@@ -50,6 +54,7 @@ public class Main extends Application {
         Menu fileMenu = new Menu("_File");
         MenuItem openItem = new MenuItem("_Open...");
         MenuItem exitItem = new MenuItem("E_xit");
+        exitItem.setOnAction(event -> exit());
         fileMenu.getItems().addAll(openItem, exitItem);
 
         Menu helpMenu = new Menu("_Help");
@@ -60,6 +65,11 @@ public class Main extends Application {
         menuBar.getMenus().addAll(fileMenu, helpMenu);
 
         return menuBar;
+    }
+
+    private void exit() {
+        System.out.println("Exiting...");
+        primaryStage.close();
     }
 
 
