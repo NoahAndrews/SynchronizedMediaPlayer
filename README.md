@@ -7,6 +7,9 @@ the Internet. I've used the source code from [this JavaFX tutorial](https://docs
 starting point. Oracle's license for that code can be found in
 [ORACLE_LICENSE.txt.](ORACLE_LICENSE.txt)
 
+### Download
+You can download the latest version at [the releases page.](https://github.com/NoahAndrews/SynchronizedMediaPlayer/releases)
+
 ### Tech Stack
 This software is built using JavaFX for the GUI and media playback
 functionality. This is my first ever JavaFX project, so I'm learning as 
