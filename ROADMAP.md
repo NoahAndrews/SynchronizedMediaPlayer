@@ -1,10 +1,10 @@
 # Roadmap
 ### Planned features
-* Add playback synchronization
-* Add menu-based interface
-* Add buttons for skipping forward and backward small amounts
+* Playback synchronization
+* Menu-based interface
+* Buttons for skipping forward and backward small amounts
 * Somewhat prettier interface
 
 ### Possible features
-* Create reusable library for synchronization networking protocol
-* Create Android app
+* Reusable library for synchronization networking protocol
+* Android app
