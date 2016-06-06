@@ -8,3 +8,4 @@
 ### Possible features
 * Reusable library for synchronization networking protocol
 * Android app
+* File transfer for selected audio file
