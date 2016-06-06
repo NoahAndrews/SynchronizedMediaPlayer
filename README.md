@@ -9,7 +9,8 @@ starting point. Oracle's license for that code can be found in
 
 ### Tech Stack
 This software is built using JavaFX for the GUI and media playback
-functionality. Gradle is being used as the build system.
+functionality. This is my first ever JavaFX project, so I'm learning as 
+I go. Gradle is being used as the build system.
 
 ### Other Documents
 * The changelog for this software can be found in [CHANGELOG.md](CHANGELOG.md)
