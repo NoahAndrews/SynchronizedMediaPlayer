@@ -1,6 +1,6 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-/*
+/**
     Copyright (C) 2016 Noah Andrews
 
     This program is free software: you can redistribute it and/or modify
