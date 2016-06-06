@@ -19,6 +19,10 @@ package me.noahandrews.mediaplayersync.javafx;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -28,11 +32,33 @@ public class Main extends Application {
         primaryStage.setTitle("Synchronized media player");
 
         MediaControl mediaControl = new MediaControl();
-        Scene scene = new Scene(mediaControl, 570, 35);
+
+        BorderPane primaryPane = new BorderPane();
+        primaryPane.setCenter(mediaControl);
+        primaryPane.setTop(getMenuBar());
+
+        Scene scene = new Scene(primaryPane, 570, 60);
 
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();
+    }
+
+    private MenuBar getMenuBar() {
+        MenuBar menuBar = new MenuBar();
+
+        Menu fileMenu = new Menu("_File");
+        MenuItem openItem = new MenuItem("_Open...");
+        MenuItem exitItem = new MenuItem("E_xit");
+        fileMenu.getItems().addAll(openItem, exitItem);
+
+        Menu helpMenu = new Menu("_Help");
+        MenuItem aboutItem = new MenuItem("_About...");
+        helpMenu.getItems().addAll(aboutItem);
+
+        menuBar.getMenus().addAll(fileMenu, helpMenu);
+
+        return menuBar;
     }
 
 
