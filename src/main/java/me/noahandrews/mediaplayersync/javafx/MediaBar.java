@@ -75,7 +75,7 @@ public class MediaBar extends HBox {
         timeSlider.setMinWidth(50);
         timeSlider.setMaxWidth(Double.MAX_VALUE);
 
-        elapsedTimeLabel = new Label();
+        elapsedTimeLabel = new Label("00:00/00:00");
         elapsedTimeLabel.setMinWidth(50);
         setMargin(elapsedTimeLabel, new Insets(0, 15, 0, 0));
 
