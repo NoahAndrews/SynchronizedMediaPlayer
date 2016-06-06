@@ -47,15 +47,14 @@ public class MediaBar extends HBox {
     private Duration duration;
     private Button playButton;
     private Slider timeSlider;
-    private Label playTime;
+    private Label elapsedTimeLabel;
     private Slider volumeSlider;
 
     public MediaBar() {
         setAlignment(Pos.CENTER);
         setPadding(new Insets(5, 10, 5, 10));
+        setSpacing(10);
 
-        Label spacer1 = new Label("   ");
-        Label spacer2 = new Label("   ");
         Label timeLabel = new Label("Time: ");
         Label volumeLabel = new Label("Vol: ");
 
@@ -79,9 +78,9 @@ public class MediaBar extends HBox {
         timeSlider.setMinWidth(50);
         timeSlider.setMaxWidth(Double.MAX_VALUE);
 
-        playTime = new Label();
-        playTime.setPrefWidth(130);
-        playTime.setMinWidth(50);
+        elapsedTimeLabel = new Label();
+        elapsedTimeLabel.setMinWidth(50);
+        setMargin(elapsedTimeLabel, new Insets(0, 15, 0, 0));
 
         volumeSlider = new Slider();
         volumeSlider.setPrefWidth(70);
@@ -90,12 +89,10 @@ public class MediaBar extends HBox {
 
         getChildren().addAll(
                 openButton,
-                spacer1,
                 playButton,
-                spacer2,
                 timeLabel,
                 timeSlider,
-                playTime,
+                elapsedTimeLabel,
                 volumeLabel,
                 volumeSlider);
     }
@@ -175,10 +172,10 @@ public class MediaBar extends HBox {
     }
 
     protected void updateValues() {
-        if (mediaPlayer != null && playTime != null && timeSlider != null && volumeSlider != null) {
+        if (mediaPlayer != null && elapsedTimeLabel != null && timeSlider != null && volumeSlider != null) {
             Platform.runLater(() -> {
                 Duration currentTime = mediaPlayer.getCurrentTime();
-                playTime.setText(formatTime(currentTime, duration));
+                elapsedTimeLabel.setText(formatTime(currentTime, duration));
                 timeSlider.setDisable(duration.isUnknown());
                 if (!timeSlider.isDisabled() && duration.greaterThan(Duration.ZERO) && !timeSlider.isValueChanging()) {
                     timeSlider.setValue(currentTime.divide(duration.toMillis()).toMillis() * 100.0);
