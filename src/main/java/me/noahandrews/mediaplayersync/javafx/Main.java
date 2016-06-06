@@ -38,12 +38,19 @@ public class Main extends Application {
         BorderPane primaryPane = new BorderPane();
         primaryPane.setCenter(mediaBar);
         primaryPane.setTop(getMenuBar());
+        primaryStage.setMinWidth(600);
+        primaryPane.setPrefWidth(600);
 
-        Scene scene = new Scene(primaryPane, 570, 60);
+        //Scene scene = new Scene(primaryPane, 570, 60);
+        Scene scene = new Scene(primaryPane);
+
 
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();
+
+        primaryStage.setMaxHeight(primaryStage.getHeight());
+        primaryStage.setMinHeight(primaryStage.getHeight());
 
         primaryStage.setOnCloseRequest(event -> exit());
     }
