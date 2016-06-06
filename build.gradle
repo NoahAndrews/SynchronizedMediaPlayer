@@ -1,5 +1,5 @@
 group 'me.noahandrews.mediaplayersync'
-version '0.1'
+version '0.2-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'application'
