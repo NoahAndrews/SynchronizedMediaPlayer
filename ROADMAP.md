@@ -6,6 +6,7 @@
 * Somewhat prettier interface
 * Ask the user if they really meant to quit if they are connected to another computer
 * Save the currently open file and timestamp upon exit for use upon relaunch
+* Update checker
 
 ### Possible features
 * Reusable library for synchronization networking protocol
