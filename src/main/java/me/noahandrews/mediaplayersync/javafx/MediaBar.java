@@ -25,7 +25,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -40,7 +39,7 @@ import java.io.File;
 /**
  * Created by noah on 6/4/2016.
  */
-public class MediaControl extends BorderPane {
+public class MediaBar extends HBox {
     private Media media;
     private MediaPlayer mediaPlayer;
     private boolean stopRequested = false;
@@ -50,13 +49,10 @@ public class MediaControl extends BorderPane {
     private Slider timeSlider;
     private Label playTime;
     private Slider volumeSlider;
-    private HBox mediaBar;
 
-    public MediaControl() {
-        mediaBar = new HBox();
-        mediaBar.setAlignment(Pos.CENTER);
-        mediaBar.setPadding(new Insets(5, 10, 5, 10));
-        BorderPane.setAlignment(mediaBar, Pos.CENTER);
+    public MediaBar() {
+        setAlignment(Pos.CENTER);
+        setPadding(new Insets(5, 10, 5, 10));
 
         Label spacer1 = new Label("   ");
         Label spacer2 = new Label("   ");
@@ -79,7 +75,7 @@ public class MediaControl extends BorderPane {
         playButton = new Button(">");
 
         timeSlider = new Slider();
-        HBox.setHgrow(timeSlider, Priority.ALWAYS);
+        setHgrow(timeSlider, Priority.ALWAYS);
         timeSlider.setMinWidth(50);
         timeSlider.setMaxWidth(Double.MAX_VALUE);
 
@@ -92,7 +88,7 @@ public class MediaControl extends BorderPane {
         volumeSlider.setMaxWidth(Region.USE_PREF_SIZE);
         volumeSlider.setMinWidth(30);
 
-        mediaBar.getChildren().addAll(
+        getChildren().addAll(
                 openButton,
                 spacer1,
                 playButton,
@@ -102,8 +98,6 @@ public class MediaControl extends BorderPane {
                 playTime,
                 volumeLabel,
                 volumeSlider);
-
-        setBottom(mediaBar);
     }
 
     private void setupPlayer() {

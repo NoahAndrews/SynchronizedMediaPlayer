@@ -33,10 +33,10 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Synchronized media player");
 
-        MediaControl mediaControl = new MediaControl();
+        MediaBar mediaBar = new MediaBar();
 
         BorderPane primaryPane = new BorderPane();
-        primaryPane.setCenter(mediaControl);
+        primaryPane.setCenter(mediaBar);
         primaryPane.setTop(getMenuBar());
 
         Scene scene = new Scene(primaryPane, 570, 60);
