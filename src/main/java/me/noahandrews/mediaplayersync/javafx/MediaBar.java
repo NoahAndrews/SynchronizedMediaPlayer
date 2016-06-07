@@ -18,8 +18,6 @@ package me.noahandrews.mediaplayersync.javafx;
 */
 
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -28,24 +26,19 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaPlayer.Status;
-import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import java.io.File;
+import static me.noahandrews.mediaplayersync.javafx.PlaybackStatus.PAUSED;
 
 public class MediaBar extends HBox {
-    private Media media;
-    private MediaPlayer mediaPlayer;
-    private boolean stopRequested = false;
-    private boolean atEndOfMedia = false;
-    private Duration duration;
     private Button playButton;
     private Slider timeSlider;
     private Label elapsedTimeLabel;
     private Slider volumeSlider;
+
+    private InputEventHandler registeredEventHandler;
+
+    private PlaybackStatus status = PAUSED;
 
     public MediaBar() {
         setAlignment(Pos.CENTER);
@@ -55,25 +48,23 @@ public class MediaBar extends HBox {
         Label timeLabel = new Label("Time: ");
         Label volumeLabel = new Label("Vol: ");
 
-        Button openButton = new Button("Open");
-        openButton.setOnAction(event -> {
-            FileChooser fc = new FileChooser();
-            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"));
-            File file = fc.showOpenDialog(null);
-            if (file == null) {
-                return;
-            }
-            media = new Media(file.toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-            setupPlayer();
-        });
-
         playButton = new Button(">");
+        playButton.setOnAction(event -> {
+            switch (status) {
+                case PAUSED:
+                    registeredEventHandler.play();
+                    break;
+                case PLAYING:
+                    registeredEventHandler.pause();
+                    break;
+            }
+        });
 
         timeSlider = new Slider();
         setHgrow(timeSlider, Priority.ALWAYS);
         timeSlider.setMinWidth(50);
         timeSlider.setMaxWidth(Double.MAX_VALUE);
+        timeSlider.setOnMouseReleased(event -> registeredEventHandler.timeSliderReleased(timeSlider.getValue()));
 
         elapsedTimeLabel = new Label("00:00/00:00");
         elapsedTimeLabel.setMinWidth(50);
@@ -84,8 +75,11 @@ public class MediaBar extends HBox {
         volumeSlider.setMaxWidth(Region.USE_PREF_SIZE);
         volumeSlider.setMinWidth(30);
 
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            registeredEventHandler.volumeSliderChanged(oldValue.doubleValue(), newValue.doubleValue(), volumeSlider.isPressed());
+        });
+
         getChildren().addAll(
-                openButton,
                 playButton,
                 timeLabel,
                 timeSlider,
@@ -94,94 +88,42 @@ public class MediaBar extends HBox {
                 volumeSlider);
     }
 
-    private void setupPlayer() {
-        if (mediaPlayer != null) {
-            mediaPlayer.setAutoPlay(false);
-
-            mediaPlayer.currentTimeProperty().addListener(new InvalidationListener() {
-                @Override
-                public void invalidated(Observable observable) {
-                    updateValues();
-                }
-            });
-
-            mediaPlayer.setOnPlaying(() -> {
-                if (stopRequested) {
-                    mediaPlayer.pause();
-                    stopRequested = false;
-                } else {
-                    playButton.setText("||");
-                }
-            });
-
-            mediaPlayer.setOnReady(() -> {
-                duration = mediaPlayer.getMedia().getDuration();
-                updateValues();
-            });
-
-            mediaPlayer.setCycleCount(1);
-            mediaPlayer.setOnEndOfMedia(() -> {
-                playButton.setText(">");
-                stopRequested = true;
-                atEndOfMedia = true;
-            });
-
-            mediaPlayer.setOnPaused(() -> {
-                System.out.println("onPaused");
-                playButton.setText(">");
-            });
-
-            playButton.setOnAction(event -> {
-                Status status = mediaPlayer.getStatus();
-                if (status == Status.UNKNOWN || status == Status.HALTED) {
-                    return;
-                }
-
-                if (status == Status.PAUSED || status == Status.READY || status == Status.STOPPED) {
-                    if (atEndOfMedia) {
-                        mediaPlayer.seek(mediaPlayer.getStartTime());
-                        atEndOfMedia = false;
-                    }
-                    mediaPlayer.play();
-                } else {
-                    mediaPlayer.pause();
-                }
-            });
-
-            timeSlider.valueProperty().addListener(new InvalidationListener() {
-                @Override
-                public void invalidated(Observable observable) {
-                    if (timeSlider.isValueChanging()) {
-                        mediaPlayer.seek(duration.multiply(timeSlider.getValue() / 100.0));
-                    }
-                }
-            });
-
-            volumeSlider.valueProperty().addListener(new InvalidationListener() {
-                @Override
-                public void invalidated(Observable observable) {
-                    if (volumeSlider.isValueChanging()) {
-                        mediaPlayer.setVolume(volumeSlider.getValue() / 100.0);
-                    }
+    void updateVolumeLevel(double volume) {
+        if (volumeSlider != null) {
+            Platform.runLater(() -> {
+                if (!volumeSlider.isValueChanging()) {
+                    volumeSlider.setValue((int) Math.round(volume * 100));
                 }
             });
         }
     }
 
-    protected void updateValues() {
-        if (mediaPlayer != null && elapsedTimeLabel != null && timeSlider != null && volumeSlider != null) {
+    void updateTimes(Duration currentTime, Duration duration) {
+        if (elapsedTimeLabel != null && timeSlider != null) {
             Platform.runLater(() -> {
-                Duration currentTime = mediaPlayer.getCurrentTime();
                 elapsedTimeLabel.setText(formatTime(currentTime, duration));
                 timeSlider.setDisable(duration.isUnknown());
-                if (!timeSlider.isDisabled() && duration.greaterThan(Duration.ZERO) && !timeSlider.isValueChanging()) {
+                if (!timeSlider.isDisabled() && duration.greaterThan(Duration.ZERO) && !timeSlider.isPressed()) {
                     timeSlider.setValue(currentTime.divide(duration.toMillis()).toMillis() * 100.0);
-                }
-                if (!volumeSlider.isValueChanging()) {
-                    volumeSlider.setValue((int) Math.round(mediaPlayer.getVolume() * 100));
                 }
             });
         }
+    }
+
+    void setStatus(PlaybackStatus status) {
+        this.status = status;
+        switch (status) {
+            case PAUSED:
+                playButton.setText(">");
+                break;
+            case PLAYING:
+                playButton.setText("||");
+                break;
+        }
+    }
+
+    public void setEventHandler(InputEventHandler registeredEventHandler) {
+        this.registeredEventHandler = registeredEventHandler;
     }
 
     private static String formatTime(Duration elapsed, Duration duration) {
@@ -200,8 +142,7 @@ public class MediaBar extends HBox {
                 intDuration -= durationHours * 60 * 60;
             }
             int durationMinutes = intDuration / 60;
-            int durationSeconds = intDuration - durationHours * 60 * 60 -
-                    durationMinutes * 60;
+            int durationSeconds = intDuration - durationHours * 60 * 60 - durationMinutes * 60;
             if (durationHours > 0) {
                 return String.format("%d:%02d:%02d/%d:%02d:%02d",
                         elapsedHours, elapsedMinutes, elapsedSeconds,
@@ -220,5 +161,20 @@ public class MediaBar extends HBox {
                         elapsedSeconds);
             }
         }
+    }
+
+
+    /**
+     * The reason the time slider and volume sliders have different events associated with them is that the time slider
+     * needs special handling because it is automatically advanced forward continually.
+     */
+    interface InputEventHandler {
+        void play();
+
+        void pause();
+
+        void timeSliderReleased(double position);
+
+        void volumeSliderChanged(double oldValue, double newValue, boolean isPressed);
     }
 }
