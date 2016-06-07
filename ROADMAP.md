@@ -15,3 +15,4 @@
 * File transfer for selected audio file
 * Speeding up and slowing down audio
 * Removing silence from audio
+* Ability to deny specific users from sending events
