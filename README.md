@@ -15,9 +15,15 @@ This software is built using JavaFX for the GUI and media playback
 functionality. This is my first ever JavaFX project, so I'm learning as 
 I go. Gradle is being used as the build system.
 
+### Protocol
+I'm calling the networking protocol I'm developing for this project SAVPP,
+for Synchronized Audio/Video Playback Protocol. I plan to implement it
+using [Protocol Buffers.](https://developers.google.com/protocol-buffers/) You can find the Java implementation [here.](https://github.com/NoahAndrews/SAVPP-java)
+
 ### Other Documents
 * The changelog for this software can be found in [CHANGELOG.md](CHANGELOG.md)
 * The roadmap for this software can be found in [ROADMAP.md](ROADMAP.md)
+* Notes on how the SAVPP protocol will work can be found [here.](https://github.com/NoahAndrews/SAVPP-java/blob/master/NOTES.md)
 
 ### Legal Stuff
 This software is licensed under the AGPL version 3. Basically, if you
