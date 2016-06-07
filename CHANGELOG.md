@@ -4,3 +4,4 @@
 
 ###  0.2 
 * Lots of UI refinements
+* Bugfixes for sliders

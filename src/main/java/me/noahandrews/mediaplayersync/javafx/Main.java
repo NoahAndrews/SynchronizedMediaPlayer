@@ -79,7 +79,7 @@ public class Main extends Application {
 
         Menu helpMenu = new Menu("_Help");
         MenuItem aboutItem = new MenuItem("_About...");
-        aboutItem.setOnAction(event -> new AlertBox("Version 0.2-SNAPSHOT", "About").showAndWait());
+        aboutItem.setOnAction(event -> new AlertBox("Version 0.2", "About").showAndWait());
         helpMenu.getItems().addAll(aboutItem);
 
         menuBar.getMenus().addAll(fileMenu, helpMenu);
