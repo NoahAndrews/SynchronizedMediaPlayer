@@ -13,3 +13,5 @@
 * Reusable library for synchronization networking protocol
 * Android app
 * File transfer for selected audio file
+* Speeding up and slowing down audio
+* Removing silence from audio
