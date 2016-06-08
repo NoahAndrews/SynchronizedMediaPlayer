@@ -8,6 +8,7 @@
 * Update checker
 * Preview audio while dragging scrubber
 * Display filename
+* SSL encryption
 
 ### Possible features
 * Reusable library for synchronization networking protocol
