@@ -17,3 +17,4 @@
 * Speeding up and slowing down audio
 * Removing silence from audio
 * Ability to deny specific users from sending events
+* Integration with podcast repository
