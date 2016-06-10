@@ -89,7 +89,9 @@ public class Main extends Application {
 
     private void exit() {
         System.out.println("Exiting...");
-        mediaPlayer.dispose();
+        if (mediaPlayer != null) {
+            mediaPlayer.dispose();
+        }
         primaryStage.close();
     }
 
