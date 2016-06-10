@@ -32,8 +32,10 @@ modified source code, and release it under this same license. In
 addition, if you host a server using a modified version of my source code,
 you must make those modifications available as well, even if you don't
 distribute a binary version. The full license is in [LICENSE.txt.](LICENSE.txt)
-If I end up making a reusable module for the network synchronization
-functionality, I may release it under a more liberal license.
+The reusable module for the network synchronization
+functionality is being released under the much more liberal MIT license.
+You can effectively do whatever you want with that code, as long as you
+give me proper credit for it and include the license.
 
 Copyright (C) 2016 Noah Andrews
 
