@@ -27,6 +27,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 
@@ -46,6 +47,7 @@ public class Main extends Application {
 
         mediaBar = new MediaBar();
         mediaBar.setEventHandler(new MediaBarInputListener());
+        mediaBar.updateTimes(Duration.ZERO, Duration.UNKNOWN);
 
         BorderPane primaryPane = new BorderPane();
         primaryPane.setCenter(mediaBar);
