@@ -151,6 +151,9 @@ public class Main extends Application {
     private class MediaBarInputListener implements MediaBar.InputEventHandler {
         @Override
         public void play() {
+            if (mediaPlayer == null) {
+                return;
+            }
             MediaPlayer.Status status = mediaPlayer.getStatus();
             if (status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED) {
                 return;
@@ -169,6 +172,9 @@ public class Main extends Application {
 
         @Override
         public void pause() {
+            if (mediaPlayer == null) {
+                return;
+            }
             MediaPlayer.Status status = mediaPlayer.getStatus();
             if (status == MediaPlayer.Status.PLAYING) {
                 mediaPlayer.pause();
@@ -178,12 +184,14 @@ public class Main extends Application {
 
         @Override
         public void timeSliderReleased(double position) {
-            mediaPlayer.seek(mediaPlayer.getMedia().getDuration().multiply(position / 100.0));
+            if (mediaPlayer != null) {
+                mediaPlayer.seek(mediaPlayer.getMedia().getDuration().multiply(position / 100.0));
+            }
         }
 
         @Override
         public void volumeSliderChanged(double oldValue, double newValue, boolean isPressed) {
-            if (isPressed) {
+            if (isPressed && mediaPlayer != null) {
                 mediaPlayer.setVolume(newValue / 100.0);
             }
         }
