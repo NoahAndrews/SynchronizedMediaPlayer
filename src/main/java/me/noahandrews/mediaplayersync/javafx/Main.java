@@ -19,10 +19,9 @@ package me.noahandrews.mediaplayersync.javafx;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -37,6 +36,9 @@ public class Main extends Application {
     private MediaPlayer mediaPlayer;
     private MediaBar mediaBar;
 
+    private Button networkSetupButton;
+    private Tooltip networkSetupButtonTooltip;
+
     private boolean stopRequested = false;
     private boolean atEndOfMedia = false;
 
@@ -48,6 +50,14 @@ public class Main extends Application {
         mediaBar = new MediaBar();
         mediaBar.setEventHandler(new MediaBarInputListener());
         mediaBar.updateTimes(Duration.ZERO, Duration.UNKNOWN);
+
+        StackPane networkSetupButtonWrapper = new StackPane(); //A wrapper is required to display a tooltip on a disabled control
+        networkSetupButton = new Button("Setup network");
+        networkSetupButton.setDisable(true);
+        networkSetupButtonTooltip = new Tooltip("A file must be loaded before you can configure a network connection.");
+        networkSetupButtonWrapper.getChildren().add(networkSetupButton);
+        Tooltip.install(networkSetupButtonWrapper, networkSetupButtonTooltip);
+        mediaBar.getChildren().add(networkSetupButtonWrapper);
 
         BorderPane primaryPane = new BorderPane();
         primaryPane.setCenter(mediaBar);
@@ -107,6 +117,8 @@ public class Main extends Application {
         Media media = new Media(file.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         setupPlayer();
+        networkSetupButton.setDisable(false);
+        networkSetupButtonTooltip.setText("");
     }
 
     private void setupPlayer() {
