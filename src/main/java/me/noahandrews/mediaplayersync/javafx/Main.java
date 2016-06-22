@@ -36,6 +36,8 @@ public class Main extends Application {
     private MediaPlayer mediaPlayer;
     private MediaBar mediaBar;
 
+    NetworkConfigStage networkConfigStage;
+
     private Button networkSetupButton;
     private Tooltip networkSetupButtonTooltip;
 
@@ -51,9 +53,15 @@ public class Main extends Application {
         mediaBar.setEventHandler(new MediaBarInputListener());
         mediaBar.updateTimes(Duration.ZERO, Duration.UNKNOWN);
 
+        networkConfigStage = new NetworkConfigStage();
+
         StackPane networkSetupButtonWrapper = new StackPane(); //A wrapper is required to display a tooltip on a disabled control
         networkSetupButton = new Button("Setup network");
         networkSetupButton.setDisable(true);
+        networkSetupButton.setOnAction(event -> {
+            networkConfigStage.show();
+            networkConfigStage.toFront();
+        });
         networkSetupButtonTooltip = new Tooltip("A file must be loaded before you can configure a network connection.");
         networkSetupButtonWrapper.getChildren().add(networkSetupButton);
         Tooltip.install(networkSetupButtonWrapper, networkSetupButtonTooltip);
@@ -104,6 +112,7 @@ public class Main extends Application {
         if (mediaPlayer != null) {
             mediaPlayer.dispose();
         }
+        networkConfigStage.close();
         primaryStage.close();
     }
 

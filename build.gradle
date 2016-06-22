@@ -25,6 +25,10 @@ dependencies {
     testCompile 'org.testfx:testfx-junit:4.0.+'
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
 jar {
     destinationDir = file('build/jar')
     manifest {
