@@ -1,4 +1,5 @@
 # Synchronized Audio Player
+[![Build Status](https://travis-ci.org/NoahAndrews/SynchronizedMediaPlayer.svg?branch=master)](https://travis-ci.org/NoahAndrews/SynchronizedMediaPlayer)
 
 ### Overview
 The goal of this project is to produce a simple audio player that will
