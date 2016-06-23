@@ -55,7 +55,7 @@ public class Main extends Application {
 
         networkConfigStage = new NetworkConfigStage();
 
-        StackPane networkSetupButtonWrapper = new StackPane(); //A wrapper is required to display a tooltip on a disabled control
+        StackPane networkSetupButtonContainer = new StackPane(); //A container is required to display a tooltip on a disabled control
         networkSetupButton = new Button("Setup network");
         networkSetupButton.setDisable(true);
         networkSetupButton.setOnAction(event -> {
@@ -63,9 +63,9 @@ public class Main extends Application {
             networkConfigStage.toFront();
         });
         networkSetupButtonTooltip = new Tooltip("A file must be loaded before you can configure a network connection.");
-        networkSetupButtonWrapper.getChildren().add(networkSetupButton);
-        Tooltip.install(networkSetupButtonWrapper, networkSetupButtonTooltip);
-        mediaBar.getChildren().add(networkSetupButtonWrapper);
+        networkSetupButtonContainer.getChildren().add(networkSetupButton);
+        Tooltip.install(networkSetupButtonContainer, networkSetupButtonTooltip);
+        mediaBar.getChildren().add(networkSetupButtonContainer);
 
         BorderPane primaryPane = new BorderPane();
         primaryPane.setCenter(mediaBar);
