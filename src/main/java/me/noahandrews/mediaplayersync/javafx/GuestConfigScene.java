@@ -1,6 +1,15 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-/*
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+/**
  * MIT License
  * <p>
  * Copyright (c) 2016 Noah Andrews
@@ -23,37 +32,23 @@ package me.noahandrews.mediaplayersync.javafx;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+public class GuestConfigScene extends Scene {
+    private final VBox vBox;
+    private final TextField hostnameField;
+    private final Button connectButton;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+    public GuestConfigScene(ModeSelector modeSelector, double width, double height) {
+        super(new VBox(20), width, height);
+        vBox = (VBox) getRoot();
+        vBox.setPadding(new Insets(10));
+        vBox.getChildren().add(modeSelector);
 
-public class NetworkConfigStage extends Stage {
-    public static final int WIDTH = 325;
-    ModeSelector modeSelector;
+        HBox hBox = new HBox(10);
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hostnameField = new TextField("127.0.0.1");
+        connectButton = new Button("Connect");
+        hBox.getChildren().addAll(new Label("Hostname"), hostnameField, connectButton);
 
-    public NetworkConfigStage() {
-        super();
-
-        setTitle("Network Configuration");
-        setResizable(false);
-        modeSelector = new ModeSelector();
-
-        StackPane initialSceneStackPane = new StackPane();
-        initialSceneStackPane.getChildren().add(modeSelector);
-        initialSceneStackPane.setAlignment(Pos.TOP_CENTER);
-        initialSceneStackPane.setPadding(new Insets(10));
-        Scene initialScene = new Scene(initialSceneStackPane, WIDTH, 60);
-        setScene(initialScene);
-
-        modeSelector.setHostButtonListener(event -> {
-            setScene(new HostConfigScene(modeSelector, WIDTH, 60));
-        });
-
-        modeSelector.setGuestButtonListener(event -> {
-            setScene(new GuestConfigScene(modeSelector, WIDTH, 100));
-        });
+        vBox.getChildren().add(hBox);
     }
 }

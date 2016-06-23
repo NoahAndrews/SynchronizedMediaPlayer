@@ -42,10 +42,9 @@ public class ModeSelector extends HBox {
 
     public ModeSelector() {
         super(25);
-        setPadding(new Insets(20));
-        setMaxHeight(60);
+        setMaxHeight(40);
         setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-        setAlignment(Pos.TOP_CENTER);
+        setAlignment(Pos.CENTER_LEFT);
 
         Label modeLabel = new Label("Mode:");
         hostButton = new RadioButton("Host");
@@ -54,6 +53,8 @@ public class ModeSelector extends HBox {
         ToggleGroup toggleGroup = new ToggleGroup();
         hostButton.setToggleGroup(toggleGroup);
         guestButton.setToggleGroup(toggleGroup);
+
+        setMargin(modeLabel, new Insets(0, 30, 0, 0));
 
         getChildren().addAll(modeLabel, hostButton, guestButton);
     }

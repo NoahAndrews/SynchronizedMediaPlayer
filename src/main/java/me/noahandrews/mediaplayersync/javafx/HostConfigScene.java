@@ -1,5 +1,6 @@
 package me.noahandrews.mediaplayersync.javafx;
 
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 
@@ -33,7 +34,7 @@ public class HostConfigScene extends Scene {
     public HostConfigScene(ModeSelector modeSelector, double width, double height) {
         super(new VBox(), width, height);
         vBox = (VBox) getRoot();
-
         vBox.getChildren().add(modeSelector);
+        vBox.setPadding(new Insets(10));
     }
 }
