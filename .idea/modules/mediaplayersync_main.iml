@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="mediaplayersync:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="me.noahandrews.mediaplayersync" external.system.module.type="sourceSet" external.system.module.version="0.3-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/../../build/classes/main" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: me.noahandrews.savpp:savpp-server:0.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: me.noahandrews.savpp:savpp-client:0.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.dagger:dagger:2.5" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.6.1" level="project" />
+    <orderEntry type="library" name="Gradle: me.noahandrews.savpp:savpp-core:0.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:2.6.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.dagger:dagger-compiler:2.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.dagger:dagger-producers:2.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:19.0" level="project" />
+  </component>
+</module>
