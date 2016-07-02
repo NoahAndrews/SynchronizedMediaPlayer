@@ -1,6 +1,6 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-/*
+/**
  * MIT License
  * <p>
  * Copyright (c) 2016 Noah Andrews
@@ -24,36 +24,10 @@ package me.noahandrews.mediaplayersync.javafx;
  * SOFTWARE.
  */
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+public interface NetworkConfigView {
+    void show();
 
-public class NetworkConfigStage extends Stage {
-    public static final int WIDTH = 325;
-    ModeSelector modeSelector;
+    void toFront();
 
-    public NetworkConfigStage() {
-        super();
-
-        setTitle("Network Configuration");
-        setResizable(false);
-        modeSelector = new ModeSelector();
-
-        StackPane initialSceneStackPane = new StackPane();
-        initialSceneStackPane.getChildren().add(modeSelector);
-        initialSceneStackPane.setAlignment(Pos.TOP_CENTER);
-        initialSceneStackPane.setPadding(new Insets(10));
-        Scene initialScene = new Scene(initialSceneStackPane, WIDTH, 60);
-        setScene(initialScene);
-
-        modeSelector.setHostButtonListener(event -> {
-            setScene(new HostConfigScene(modeSelector, WIDTH, 60));
-        });
-
-        modeSelector.setGuestButtonListener(event -> {
-            setScene(new GuestConfigScene(modeSelector, WIDTH, 100));
-        });
-    }
+    void close();
 }
