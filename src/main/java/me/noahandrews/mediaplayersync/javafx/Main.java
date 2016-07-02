@@ -53,7 +53,7 @@ public class Main extends Application {
         mediaBar.setEventHandler(new MediaBarInputListener());
         mediaBar.updateTimes(Duration.ZERO, Duration.UNKNOWN);
 
-        networkConfigView = new NetworkConfigViewImpl();
+        networkConfigView = new JfxNetworkConfigView();
 
         StackPane networkSetupButtonContainer = new StackPane(); //A container is required to display a tooltip on a disabled control
         networkSetupButton = new Button("Setup network");
