@@ -32,14 +32,15 @@ import javafx.scene.layout.VBox;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class GuestConfigScene extends Scene {
-    private final VBox vBox;
+public class JfxGuestConfigView implements GuestConfigView {
+    private Scene scene;
+
     private final TextField hostnameField;
     private final Button connectButton;
 
-    public GuestConfigScene(ModeSelector modeSelector, double width, double height) {
-        super(new VBox(20), width, height);
-        vBox = (VBox) getRoot();
+    public JfxGuestConfigView(ModeSelector modeSelector, double width, double height) {
+        VBox vBox = new VBox(20);
+        scene = new Scene(vBox, width, height);
         vBox.setPadding(new Insets(10));
         vBox.getChildren().add(modeSelector);
 
@@ -50,5 +51,12 @@ public class GuestConfigScene extends Scene {
         hBox.getChildren().addAll(new Label("Hostname"), hostnameField, connectButton);
 
         vBox.getChildren().add(hBox);
+    }
+
+    public Scene getScene() {
+        if (scene == null) {
+            throw new RuntimeException("this guest config view has a null scene");
+        }
+        return scene;
     }
 }
