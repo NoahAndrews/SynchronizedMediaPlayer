@@ -1,5 +1,14 @@
 package me.noahandrews.mediaplayersync.javafx;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
 /**
  * MIT License
  * <p>
@@ -24,5 +33,25 @@ package me.noahandrews.mediaplayersync.javafx;
  * SOFTWARE.
  */
 
-public interface GuestConfigView {
+ class GuestConfigView {
+    Scene scene;
+
+    private final TextField hostnameField;
+    private final Button connectButton;
+
+    public GuestConfigView(ModeSelector modeSelector, double width, double height) {
+        VBox vBox = new VBox(20);
+        scene = new Scene(vBox, width, height);
+        vBox.setPadding(new Insets(10));
+        vBox.getChildren().add(modeSelector);
+
+        HBox hBox = new HBox(10);
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hostnameField = new TextField("127.0.0.1");
+        connectButton = new Button("Connect");
+        hBox.getChildren().addAll(new Label("Hostname"), hostnameField, connectButton);
+
+        vBox.getChildren().add(hBox);
+    }
+
 }
