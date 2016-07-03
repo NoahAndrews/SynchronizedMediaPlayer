@@ -31,10 +31,10 @@ import javafx.scene.layout.VBox;
 class HostConfigView {
     Scene scene;
 
-    public HostConfigView(ModeSelector modeSelector, double width, double height) {
+    public HostConfigView(ModeSelectorView modeSelectorView, double width, double height) {
         VBox vBox = new VBox();
         scene = new Scene(vBox, width, height);
-        vBox.getChildren().add(modeSelector);
+        vBox.getChildren().add(modeSelectorView.hBox);
         vBox.setPadding(new Insets(10));
     }
 }

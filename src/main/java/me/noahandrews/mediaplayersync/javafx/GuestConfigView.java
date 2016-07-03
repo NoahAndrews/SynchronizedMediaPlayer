@@ -39,11 +39,11 @@ import javafx.scene.layout.VBox;
     private final TextField hostnameField;
     private final Button connectButton;
 
-    public GuestConfigView(ModeSelector modeSelector, double width, double height) {
+    public GuestConfigView(ModeSelectorView modeSelectorView, double width, double height) {
         VBox vBox = new VBox(20);
         scene = new Scene(vBox, width, height);
         vBox.setPadding(new Insets(10));
-        vBox.getChildren().add(modeSelector);
+        vBox.getChildren().add(modeSelectorView.hBox);
 
         HBox hBox = new HBox(10);
         hBox.setAlignment(Pos.CENTER_LEFT);

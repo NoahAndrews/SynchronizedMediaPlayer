@@ -37,14 +37,16 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-public class ModeSelector extends HBox {
+class ModeSelectorView {
+    HBox hBox;
+
     private RadioButton hostButton, guestButton;
 
-    public ModeSelector() {
-        super(25);
-        setMaxHeight(40);
-        setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-        setAlignment(Pos.CENTER_LEFT);
+    public ModeSelectorView() {
+        hBox = new HBox(25);
+        hBox.setMaxHeight(40);
+        hBox.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox.setAlignment(Pos.CENTER_LEFT);
 
         Label modeLabel = new Label("Mode:");
         hostButton = new RadioButton("Host");
@@ -54,9 +56,9 @@ public class ModeSelector extends HBox {
         hostButton.setToggleGroup(toggleGroup);
         guestButton.setToggleGroup(toggleGroup);
 
-        setMargin(modeLabel, new Insets(0, 30, 0, 0));
+        HBox.setMargin(modeLabel, new Insets(0, 30, 0, 0));
 
-        getChildren().addAll(modeLabel, hostButton, guestButton);
+        hBox.getChildren().addAll(modeLabel, hostButton, guestButton);
     }
 
     public void setHostButtonListener(EventHandler<ActionEvent> eventHandler) {

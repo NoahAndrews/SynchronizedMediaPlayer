@@ -31,10 +31,11 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class JfxNetworkConfigView implements NetworkConfigView {
-    private static final int WIDTH = 325;
-    private ModeSelector modeSelector;
-
     private Stage stage;
+
+    private ModeSelectorView modeSelectorView;
+
+    private static final int WIDTH = 325;
 
     public JfxNetworkConfigView() {
         super();
@@ -42,21 +43,21 @@ public class JfxNetworkConfigView implements NetworkConfigView {
 
         stage.setTitle("Network Configuration");
         stage.setResizable(false);
-        modeSelector = new ModeSelector();
+        modeSelectorView = new ModeSelectorView();
 
         StackPane initialSceneStackPane = new StackPane();
-        initialSceneStackPane.getChildren().add(modeSelector);
+        initialSceneStackPane.getChildren().add(modeSelectorView.hBox);
         initialSceneStackPane.setAlignment(Pos.TOP_CENTER);
         initialSceneStackPane.setPadding(new Insets(10));
         Scene initialScene = new Scene(initialSceneStackPane, WIDTH, 60);
         stage.setScene(initialScene);
 
-        modeSelector.setHostButtonListener(event -> {
-            stage.setScene(new HostConfigView(modeSelector, WIDTH, 60).scene);
+        modeSelectorView.setHostButtonListener(event -> {
+            stage.setScene(new HostConfigView(modeSelectorView, WIDTH, 60).scene);
         });
 
-        modeSelector.setGuestButtonListener(event -> {
-            stage.setScene(new GuestConfigView(modeSelector, WIDTH, 100).scene);
+        modeSelectorView.setGuestButtonListener(event -> {
+            stage.setScene(new GuestConfigView(modeSelectorView, WIDTH, 100).scene);
         });
     }
 
