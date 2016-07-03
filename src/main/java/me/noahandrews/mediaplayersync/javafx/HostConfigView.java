@@ -28,12 +28,12 @@ import javafx.scene.layout.VBox;
  * SOFTWARE.
  */
 
-public class HostConfigScene extends Scene {
-    VBox vBox;
+class HostConfigView {
+    Scene scene;
 
-    public HostConfigScene(ModeSelector modeSelector, double width, double height) {
-        super(new VBox(), width, height);
-        vBox = (VBox) getRoot();
+    public HostConfigView(ModeSelector modeSelector, double width, double height) {
+        VBox vBox = new VBox();
+        scene = new Scene(vBox, width, height);
         vBox.getChildren().add(modeSelector);
         vBox.setPadding(new Insets(10));
     }

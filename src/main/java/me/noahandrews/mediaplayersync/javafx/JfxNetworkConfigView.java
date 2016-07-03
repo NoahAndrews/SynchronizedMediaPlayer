@@ -52,7 +52,7 @@ public class JfxNetworkConfigView implements NetworkConfigView {
         stage.setScene(initialScene);
 
         modeSelector.setHostButtonListener(event -> {
-            stage.setScene(new HostConfigScene(modeSelector, WIDTH, 60));
+            stage.setScene(new HostConfigView(modeSelector, WIDTH, 60).scene);
         });
 
         modeSelector.setGuestButtonListener(event -> {
