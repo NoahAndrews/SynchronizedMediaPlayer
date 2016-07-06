@@ -8,8 +8,6 @@ apply plugin: 'application'
 group 'me.noahandrews.mediaplayersync'
 version '0.3-SNAPSHOT'
 
-
-
 versioneye {
     dependencies = transitive
     includePlugins = false
@@ -20,7 +18,9 @@ mainClassName = "me.noahandrews.mediaplayersync.javafx.Main"
 
 sourceCompatibility = 1.8
 
-assemble.finalizedBy(versionEyeUpdate)
+if (System.getenv('CI') != 'true') {
+    assemble.finalizedBy(versionEyeUpdate)
+}
 
 repositories {
     jcenter()
