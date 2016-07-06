@@ -1,12 +1,26 @@
-group 'me.noahandrews.mediaplayersync'
-version '0.3-SNAPSHOT'
+plugins {
+    id "org.standardout.versioneye" version "1.4.0"
+}
 
 apply plugin: 'java'
 apply plugin: 'application'
 
+group 'me.noahandrews.mediaplayersync'
+version '0.3-SNAPSHOT'
+
+
+
+versioneye {
+    dependencies = transitive
+    includePlugins = false
+    exclude 'testCompile', 'testRuntime', 'testCompileClasspath', 'testCompileOnly'
+}
+
 mainClassName = "me.noahandrews.mediaplayersync.javafx.Main"
 
 sourceCompatibility = 1.8
+
+assemble.finalizedBy(versionEyeUpdate)
 
 repositories {
     jcenter()
@@ -23,7 +37,7 @@ dependencies {
     compile 'com.google.dagger:dagger:2.5'
     compileOnly 'com.google.dagger:dagger-compiler:2.5'
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile 'org.testfx:testfx-core:4.0.+'
     testCompile 'org.testfx:testfx-junit:4.0.+'
 }

@@ -1,6 +1,8 @@
 # Synchronized Audio Player
 [![Build Status](https://travis-ci.org/NoahAndrews/SynchronizedMediaPlayer.svg?branch=master)](https://travis-ci.org/NoahAndrews/SynchronizedMediaPlayer)
 
+[![Dependency Status](https://www.versioneye.com/user/projects/577c7698649a6f000d048015/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/577c7698649a6f000d048015)
+
 ### Overview
 The goal of this project is to produce a simple audio player that will
 allow two people to listen to an audio file in sync with each other over
