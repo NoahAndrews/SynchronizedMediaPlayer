@@ -1,8 +1,16 @@
 package me.noahandrews.mediaplayersync.javafx;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import rx.Observable;
+import rx.observables.JavaFxObservable;
 
 /**
  * MIT License
@@ -27,10 +35,40 @@ import rx.Observable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface GuestConfigView {
-    Pane getPane();
 
-    String getHostname();
+class GuestConfigViewJfx implements GuestConfigView {
+    private VBox pane;
+    private HBox connectionBox;
 
-    Observable<ActionEvent> connectButtonObservable();
+    private final TextField hostnameField;
+    private final Button connectButton;
+
+    public GuestConfigViewJfx() {
+        pane = new VBox(20);
+        pane.setPadding(new Insets(10));
+
+        connectionBox = new HBox(10);
+        connectionBox.setAlignment(Pos.CENTER_LEFT);
+        hostnameField = new TextField("127.0.0.1");
+        connectButton = new Button("Connect");
+        connectionBox.getChildren().addAll(new Label("Hostname"), hostnameField, connectButton);
+
+        pane.getChildren().clear();
+        pane.getChildren().add(connectionBox);
+    }
+
+    @Override
+    public Pane getPane() {
+        return pane;
+    }
+
+    @Override
+    public String getHostname() {
+        return hostnameField.getText();
+    }
+
+    @Override
+    public Observable<ActionEvent> connectButtonObservable() {
+        return JavaFxObservable.fromNodeEvents(connectButton, ActionEvent.ACTION);
+    }
 }

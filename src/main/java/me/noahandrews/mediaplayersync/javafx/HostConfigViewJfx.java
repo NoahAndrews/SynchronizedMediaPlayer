@@ -1,10 +1,10 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.layout.Pane;
-import rx.Observable;
+import javafx.scene.layout.VBox;
 
-/**
+/*
  * MIT License
  * <p>
  * Copyright (c) 2016 Noah Andrews
@@ -27,10 +27,17 @@ import rx.Observable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface GuestConfigView {
-    Pane getPane();
 
-    String getHostname();
+class HostConfigViewJfx implements HostConfigView {
+    private VBox pane;
 
-    Observable<ActionEvent> connectButtonObservable();
+    public HostConfigViewJfx() {
+        pane = new VBox(20);
+        pane.setPadding(new Insets(20));
+    }
+
+    @Override
+    public Pane getPane() {
+        return pane;
+    }
 }

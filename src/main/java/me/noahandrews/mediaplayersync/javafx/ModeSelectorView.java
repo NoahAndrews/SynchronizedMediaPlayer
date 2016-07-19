@@ -1,6 +1,10 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-/*
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.layout.Region;
+
+/**
  * MIT License
  * <p>
  * Copyright (c) 2016 Noah Andrews
@@ -24,48 +28,10 @@ package me.noahandrews.mediaplayersync.javafx;
  * SOFTWARE.
  */
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
+public interface ModeSelectorView {
+    Region getJfxView();
 
-class ModeSelectorView {
-    HBox hBox;
+    void setHostButtonListener(EventHandler<ActionEvent> eventHandler);
 
-    private RadioButton hostButton, guestButton;
-
-    public ModeSelectorView() {
-        hBox = new HBox(25);
-        hBox.setMaxHeight(40);
-        hBox.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-        hBox.setAlignment(Pos.CENTER_LEFT);
-
-        Label modeLabel = new Label("Mode:");
-        hostButton = new RadioButton("Host");
-        guestButton = new RadioButton("Guest");
-
-        ToggleGroup toggleGroup = new ToggleGroup();
-        hostButton.setToggleGroup(toggleGroup);
-        guestButton.setToggleGroup(toggleGroup);
-
-        HBox.setMargin(modeLabel, new Insets(0, 30, 0, 0));
-
-        hBox.getChildren().addAll(modeLabel, hostButton, guestButton);
-    }
-
-    public void setHostButtonListener(EventHandler<ActionEvent> eventHandler) {
-        hostButton.setOnAction(eventHandler);
-    }
-
-    public void setGuestButtonListener(EventHandler<ActionEvent> eventHandler) {
-        guestButton.setOnAction(eventHandler);
-    }
+    void setGuestButtonListener(EventHandler<ActionEvent> eventHandler);
 }

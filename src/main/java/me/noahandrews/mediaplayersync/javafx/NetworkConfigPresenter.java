@@ -1,6 +1,6 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-/*
+/**
  * MIT License
  * <p>
  * Copyright (c) 2016 Noah Andrews
@@ -24,55 +24,32 @@ package me.noahandrews.mediaplayersync.javafx;
  * SOFTWARE.
  */
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+public class NetworkConfigPresenter {
+    private final NetworkConfigView networkConfigView;
+    private final MainApplication mainApplication;
 
-public class JfxNetworkConfigView implements NetworkConfigView {
-    private Stage stage;
+    public NetworkConfigPresenter(NetworkConfigView networkConfigView, HostConfigPresenter hostConfigPresenter, GuestConfigPresenter guestConfigPresenter, MainApplication mainApplication) {
+        this.networkConfigView = networkConfigView;
+        this.mainApplication = mainApplication;
 
-    private ModeSelectorView modeSelectorView;
-
-    private static final int WIDTH = 325;
-
-    public JfxNetworkConfigView() {
-        super();
-        stage = new Stage();
-
-        stage.setTitle("Network Configuration");
-        stage.setResizable(false);
-        modeSelectorView = new ModeSelectorView();
-
-        StackPane initialSceneStackPane = new StackPane();
-        initialSceneStackPane.getChildren().add(modeSelectorView.hBox);
-        initialSceneStackPane.setAlignment(Pos.TOP_CENTER);
-        initialSceneStackPane.setPadding(new Insets(10));
-        Scene initialScene = new Scene(initialSceneStackPane, WIDTH, 60);
-        stage.setScene(initialScene);
+        ModeSelectorView modeSelectorView = networkConfigView.getModeSelectorView();
 
         modeSelectorView.setHostButtonListener(event -> {
-            stage.setScene(new HostConfigView(modeSelectorView, WIDTH, 60).scene);
+            networkConfigView.setChildPane(hostConfigPresenter.getPane());
+            //networkConfigView.setHeight(60);
         });
 
         modeSelectorView.setGuestButtonListener(event -> {
-            stage.setScene(new GuestConfigView(modeSelectorView, WIDTH, 100).scene);
+            networkConfigView.setChildPane(guestConfigPresenter.getPane());
+            //networkConfigView.setHeight(100);
         });
     }
 
-    @Override
     public void show() {
-        stage.show();
+        networkConfigView.show();
     }
 
-    @Override
-    public void toFront() {
-        stage.toFront();
-    }
-
-    @Override
     public void close() {
-        stage.close();
+        networkConfigView.close();
     }
 }

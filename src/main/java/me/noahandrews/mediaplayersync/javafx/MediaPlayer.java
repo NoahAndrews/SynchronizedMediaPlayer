@@ -1,7 +1,5 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import javafx.event.ActionEvent;
-import javafx.scene.layout.Pane;
 import rx.Observable;
 
 /**
@@ -27,10 +25,45 @@ import rx.Observable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface GuestConfigView {
-    Pane getPane();
 
-    String getHostname();
+public interface MediaPlayer {
+    void dispose();
 
-    Observable<ActionEvent> connectButtonObservable();
+    int getCurrentTimeMs();
+
+    Observable<Integer> currentTimeMsObservable();
+
+    int getDurationMs();
+
+    void play();
+
+    void pause();
+
+    void stop();
+
+    void seekMs(int timestamp);
+
+    void seekPercent(double percent);
+
+    void setVolumePercent(double percent);
+
+    /**
+     * @return the volume on a scale from 0.0 to 1.0
+     */
+    double getVolume();
+
+    Status getStatus();
+
+    Observable<Status> statusObservable();
+
+    enum Status {
+        INITIALIZING,
+        READY,
+        PLAYING,
+        PAUSED,
+        STOPPED,
+        BUFFERING,
+        ERRORED,
+        DISPOSED
+    }
 }

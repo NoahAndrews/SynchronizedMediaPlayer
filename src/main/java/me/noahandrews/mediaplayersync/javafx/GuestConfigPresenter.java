@@ -1,8 +1,6 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import javafx.event.ActionEvent;
 import javafx.scene.layout.Pane;
-import rx.Observable;
 
 /**
  * MIT License
@@ -27,10 +25,15 @@ import rx.Observable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface GuestConfigView {
-    Pane getPane();
 
-    String getHostname();
+public class GuestConfigPresenter {
+    private GuestConfigView guestConfigView;
 
-    Observable<ActionEvent> connectButtonObservable();
+    public GuestConfigPresenter(GuestConfigView guestConfigView) {
+        this.guestConfigView = guestConfigView;
+    }
+
+    public Pane getPane() {
+        return guestConfigView.getPane();
+    }
 }

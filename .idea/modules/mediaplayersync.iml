@@ -5,6 +5,15 @@
     <content url="file://$MODULE_DIR$/../..">
       <excludeFolder url="file://$MODULE_DIR$/../../.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/dependency-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/distributions" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/install" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/jar" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/kotlin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/kotlin-classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/scripts" />
+      <excludeFolder url="file://$MODULE_DIR$/../../build/tmp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

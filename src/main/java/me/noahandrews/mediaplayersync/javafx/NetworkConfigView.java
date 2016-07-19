@@ -1,5 +1,8 @@
 package me.noahandrews.mediaplayersync.javafx;
 
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+
 /**
  * MIT License
  * <p>
@@ -30,4 +33,12 @@ public interface NetworkConfigView {
     void toFront();
 
     void close();
+
+    ModeSelectorView getModeSelectorView();
+
+    void setScene(Scene scene);
+
+    void setHeight(int height);
+
+    void setChildPane(Pane pane);
 }

@@ -1,8 +1,8 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import javafx.event.ActionEvent;
-import javafx.scene.layout.Pane;
-import rx.Observable;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 /**
  * MIT License
@@ -27,10 +27,12 @@ import rx.Observable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface GuestConfigView {
-    Pane getPane();
 
-    String getHostname();
-
-    Observable<ActionEvent> connectButtonObservable();
+public class MediaFileProviderJfx implements FileProvider {
+    @Override
+    public File getFile() {
+        FileChooser fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"));
+        return fc.showOpenDialog(null);
+    }
 }

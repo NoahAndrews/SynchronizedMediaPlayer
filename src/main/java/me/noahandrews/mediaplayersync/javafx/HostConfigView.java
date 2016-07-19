@@ -1,10 +1,8 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 
-/*
+/**
  * MIT License
  * <p>
  * Copyright (c) 2016 Noah Andrews
@@ -28,13 +26,6 @@ import javafx.scene.layout.VBox;
  * SOFTWARE.
  */
 
-class HostConfigView {
-    Scene scene;
-
-    public HostConfigView(ModeSelectorView modeSelectorView, double width, double height) {
-        VBox vBox = new VBox();
-        scene = new Scene(vBox, width, height);
-        vBox.getChildren().add(modeSelectorView.hBox);
-        vBox.setPadding(new Insets(10));
-    }
+public interface HostConfigView {
+    Pane getPane();
 }

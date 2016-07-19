@@ -1,9 +1,5 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import javafx.event.ActionEvent;
-import javafx.scene.layout.Pane;
-import rx.Observable;
-
 /**
  * MIT License
  * <p>
@@ -27,10 +23,51 @@ import rx.Observable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface GuestConfigView {
-    Pane getPane();
 
-    String getHostname();
+class NullMainViewEventHandler implements MainViewEventHandler {
 
-    Observable<ActionEvent> connectButtonObservable();
+    @Override
+    public void onNetworkSetupButtonPressed() {
+
+    }
+
+    @Override
+    public void onPlayButtonPressed() {
+
+    }
+
+    @Override
+    public void onPauseButtonPressed() {
+
+    }
+
+    @Override
+    public void onTimeSliderMoved(double position) {
+
+    }
+
+    @Override
+    public void onVolumeSliderMoved(double oldPosition, double newPosition, boolean isPressed) {
+
+    }
+
+    @Override
+    public void onOpenMenuItemSelected() {
+
+    }
+
+    @Override
+    public void onExitMenuItemSelected() {
+
+    }
+
+    @Override
+    public void onCloseRequest() {
+
+    }
+
+    @Override
+    public void onAboutMenuItemSelected() {
+
+    }
 }

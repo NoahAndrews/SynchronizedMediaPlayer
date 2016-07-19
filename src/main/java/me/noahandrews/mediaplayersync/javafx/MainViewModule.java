@@ -1,8 +1,10 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import javafx.event.ActionEvent;
-import javafx.scene.layout.Pane;
-import rx.Observable;
+import dagger.Module;
+import dagger.Provides;
+import javafx.stage.Stage;
+
+import javax.inject.Singleton;
 
 /**
  * MIT License
@@ -27,10 +29,27 @@ import rx.Observable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface GuestConfigView {
-    Pane getPane();
+@Module
+class MainViewModule {
+    private Stage stage;
+    private final MainApplication mainApplication;
+    private final MediaModule mediaModule;
 
-    String getHostname();
+    public MainViewModule(Stage stage, MainApplication mainApplication, MediaModule mediaModule) {
+        this.stage = stage;
+        this.mainApplication = mainApplication;
+        this.mediaModule = mediaModule;
+    }
 
-    Observable<ActionEvent> connectButtonObservable();
+    @Provides
+    @Singleton
+    MainView provideMainView() {
+        return new MainViewJfx(stage);
+    }
+
+    @Provides
+    @Singleton
+    MainViewPresenter provideMainViewPresenter(MainView view, NetworkConfigPresenter networkConfigPresenter, MediaService mediaService) {
+        return new MainViewPresenter(view, networkConfigPresenter, mainApplication, mediaService);
+    }
 }
