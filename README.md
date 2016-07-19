@@ -1,7 +1,9 @@
 # Synchronized Audio Player
-[![Build Status](https://travis-ci.org/NoahAndrews/SynchronizedMediaPlayer.svg?branch=master)](https://travis-ci.org/NoahAndrews/SynchronizedMediaPlayer)
+[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/NoahAndrews/SynchronizedMediaPlayer/master/LICENSE.txt)
 
-[![Dependency Status](https://www.versioneye.com/user/projects/577c7698649a6f000d048015/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/577c7698649a6f000d048015)
+[![Build Status](https://img.shields.io/travis/NoahAndrews/SynchronizedMediaPlayer/master.svg?maxAge=2592000)](https://travis-ci.org/NoahAndrews/SynchronizedMediaPlayer)
+
+[![Dependency Status](https://www.versioneye.com/user/projects/577c7698649a6f000d048015//badge.svg?style=flat)](https://www.versioneye.com/user/projects/577c7698649a6f000d048015)
 
 ### Overview
 The goal of this project is to produce a simple audio player that will
