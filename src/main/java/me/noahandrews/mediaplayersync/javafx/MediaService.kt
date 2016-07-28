@@ -1,5 +1,13 @@
 package me.noahandrews.mediaplayersync.javafx
 
+import me.noahandrews.savpp.MediaSynchronizationClient
+import me.noahandrews.savpp.MediaSynchronizer
+import org.apache.logging.log4j.LogManager
+import java.io.File
+import java.net.URI
+import java.security.MessageDigest
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter
+
 /**
  * MIT License
  *
@@ -28,9 +36,11 @@ package me.noahandrews.mediaplayersync.javafx
  * SOFTWARE.
  */
 
-class MediaService(private val fileProvider: FileProvider, private val mediaPlayerProvider: MediaPlayerProvider, private val mediaModule: MediaModule) {
+class MediaService(private val fileProvider: FileProvider, private val mediaPlayerProvider: MediaPlayerProvider, private val mediaSynchronizationClientProvider: MediaSynchronizationClientProvider) {
     private var mediaPlayer: MediaPlayer? = null
     private var eventHandler: EventHandler? = null
+    private var mediaSynchronizer: MediaSynchronizer? = null
+    private val logger = LogManager.getLogger()
 
     fun loadNewMedia() {
         //TODO: We need to make sure any old network objects and media players get torn down when a new file is opened.
@@ -39,20 +49,27 @@ class MediaService(private val fileProvider: FileProvider, private val mediaPlay
             mediaPlayer?.dispose()
             val mediaPlayer = mediaPlayerProvider.getMediaPlayer(file)
             this.mediaPlayer = mediaPlayer
-            mediaPlayer.statusObservable()
-                    .filter { it == MediaPlayer.Status.READY }
-                    .subscribe() {
-                        eventHandler?.onMediaLoaded(mediaPlayer.durationMs)
-                    }
+            setupMediaPlayerSubscriptions(mediaPlayer)
+
+            //TODO: If a connection is established, tear it down and replace it
         }
-        mediaPlayer?.currentTimeMsObservable()?.subscribe() { currentTimeMs ->
-            if (mediaPlayer?.status != MediaPlayer.Status.INITIALIZING) {
-                eventHandler?.onPlaybackAdvanced(currentTimeMs)
-            }
+    }
+
+    fun establishConnectionAsGuest(hostname: String) {
+        //TODO: We need to make sure any old network objects and media players get torn down when a new connection is established.
+        if (mediaPlayer == null) {
+            throw IllegalStateException("No media file has been loaded.")
         }
-        mediaPlayer?.statusObservable()
-                ?.filter { it == MediaPlayer.Status.STOPPED }
-                ?.subscribe() { eventHandler?.onStop() }
+        val mediaUri = URI(mediaPlayer!!.mediaUri)
+        val mediaFileBytes = File(mediaUri).readBytes()
+        val messageDigest = MessageDigest.getInstance("MD5")
+        val md5Bytes = messageDigest.digest(mediaFileBytes) //TODO: If a file is really large, readBytes should be avoided.
+        val md5String = HexBinaryAdapter().marshal(md5Bytes)
+
+        logger.info("MD5 hash: $md5String")
+
+        mediaSynchronizer = mediaSynchronizationClientProvider.getMediaSynchronizationClient(hostname)
+        (mediaSynchronizer as MediaSynchronizationClient).connect(md5String)
     }
 
     fun play() {
@@ -87,6 +104,23 @@ class MediaService(private val fileProvider: FileProvider, private val mediaPlay
         this.eventHandler = eventHandler
     }
 
+
+    private fun setupMediaPlayerSubscriptions(mediaPlayer: MediaPlayer) {
+        mediaPlayer.statusObservable()
+                .filter { it == MediaPlayer.Status.READY }
+                .subscribe() {
+                    eventHandler?.onMediaLoaded(mediaPlayer.durationMs)
+                }
+        mediaPlayer.currentTimeMsObservable()?.subscribe() { currentTimeMs ->
+            if (mediaPlayer.status != MediaPlayer.Status.INITIALIZING) {
+                eventHandler?.onPlaybackAdvanced(currentTimeMs)
+            }
+        }
+        mediaPlayer.statusObservable()
+                ?.filter { it == MediaPlayer.Status.STOPPED }
+                ?.subscribe() { eventHandler?.onStop() }
+    }
+
     interface EventHandler {
         fun onMediaLoaded(durationMs: Int): Unit
         fun onPlay(): Unit
@@ -95,3 +129,4 @@ class MediaService(private val fileProvider: FileProvider, private val mediaPlay
         fun onPlaybackAdvanced(ms: Int): Unit
     }
 }
+

@@ -30,46 +30,10 @@ import javax.inject.Singleton;
  */
 
 @Module
-class NetworkConfigViewModule {
-    private final MainApplication mainApplication;
-
-    NetworkConfigViewModule(MainApplication mainApplication) {
-        this.mainApplication = mainApplication;
-    }
-
+public class MediaSynchronizationModule {
     @Provides
     @Singleton
-    static GuestConfigView provideGuestConfigView() {
-        return new GuestConfigViewJfx();
-    }
-
-    @Provides
-    @Singleton
-    static HostConfigView provideHostConfigView() {
-        return new HostConfigViewJfx();
-    }
-
-    @Provides
-    @Singleton
-    static NetworkConfigView provideNetworkConfigView() {
-        return new NetworkConfigViewJfx();
-    }
-
-    @Provides
-    @Singleton
-    static GuestConfigPresenter provideGuestConfigPresenter(GuestConfigView view, MediaService mediaService) {
-        return new GuestConfigPresenter(view, mediaService);
-    }
-
-    @Provides
-    @Singleton
-    static HostConfigPresenter provideHostConfigPresenter(HostConfigView view) {
-        return new HostConfigPresenter(view);
-    }
-
-    @Provides
-    @Singleton
-    NetworkConfigPresenter provideNetworkConfigPresenter(NetworkConfigView view, HostConfigPresenter hostConfigPresenter, GuestConfigPresenter guestConfigPresenter) {
-        return new NetworkConfigPresenter(view, hostConfigPresenter, guestConfigPresenter, mainApplication);
+    public MediaSynchronizationClientProvider provideMediaSynchronizationClientProvider() {
+        return new MediaSynchronizationClientProviderSavpp();
     }
 }

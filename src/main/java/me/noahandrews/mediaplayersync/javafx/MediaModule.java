@@ -40,8 +40,8 @@ public class MediaModule {
 
     @Provides
     @Singleton
-    public MediaService provideMediaService(FileProvider fileProvider, MediaPlayerProvider mediaPlayerProvider) {
-        return new MediaService(fileProvider, mediaPlayerProvider, this);
+    public MediaService provideMediaService(FileProvider fileProvider, MediaPlayerProvider mediaPlayerProvider, MediaSynchronizationClientProvider mediaSynchronizationClientProvider) {
+        return new MediaService(fileProvider, mediaPlayerProvider, mediaSynchronizationClientProvider);
     }
 
     @Provides

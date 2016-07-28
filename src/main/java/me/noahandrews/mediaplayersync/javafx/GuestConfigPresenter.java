@@ -28,9 +28,15 @@ import javafx.scene.layout.Pane;
 
 public class GuestConfigPresenter {
     private GuestConfigView guestConfigView;
+    private MediaService mediaService;
 
-    public GuestConfigPresenter(GuestConfigView guestConfigView) {
+    public GuestConfigPresenter(GuestConfigView guestConfigView, MediaService mediaService) {
         this.guestConfigView = guestConfigView;
+        this.mediaService = mediaService;
+
+        guestConfigView.connectButtonObservable().subscribe(event -> {
+            mediaService.establishConnectionAsGuest(guestConfigView.getHostname());
+        });
     }
 
     public Pane getPane() {

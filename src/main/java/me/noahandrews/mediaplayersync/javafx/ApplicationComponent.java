@@ -32,7 +32,8 @@ import javax.inject.Singleton;
 
         MainViewModule.class,
         NetworkConfigViewModule.class,
-        MediaModule.class
+        MediaModule.class,
+        MediaSynchronizationModule.class
 })
 @Singleton
 interface ApplicationComponent {

@@ -89,6 +89,11 @@ public class MediaPlayerJfxAdapter implements MediaPlayer {
     }
 
     @Override
+    public String getMediaUri() {
+        return mediaPlayer.getMedia().getSource();
+    }
+
+    @Override
     public double getVolume() {
         return mediaPlayer.getVolume();
     }

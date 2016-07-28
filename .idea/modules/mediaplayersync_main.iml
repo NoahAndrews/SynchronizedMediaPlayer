@@ -13,16 +13,16 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: me.noahandrews.savpp:savpp-core:0.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: me.noahandrews.savpp:savpp-server:0.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: me.noahandrews.savpp:savpp-client:0.0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Gradle: io.reactivex:rxjava:1.1.7" level="project" />
-    <orderEntry type="library" name="Gradle: io.reactivex:rxjavafx:0.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.reactivex:rxjava:1.1.8" level="project" />
+    <orderEntry type="library" name="Gradle: io.reactivex:rxjavafx:0.1.4" level="project" />
     <orderEntry type="library" name="Gradle: com.google.dagger:dagger:2.5" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.0.3" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.6.2" level="project" />
-    <orderEntry type="library" name="Gradle: me.noahandrews.savpp:savpp-core:0.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-runtime:1.0.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:2.6.1" level="project" />
   </component>
 </module>
