@@ -40,4 +40,6 @@ interface ApplicationComponent {
     MainViewPresenter mainViewPresenter();
 
     NetworkConfigPresenter networkConfigPresenter();
+
+    MediaService mediaService();
 }

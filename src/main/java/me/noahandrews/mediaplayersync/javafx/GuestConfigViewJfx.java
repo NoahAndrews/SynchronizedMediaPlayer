@@ -10,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import rx.Observable;
 import rx.observables.JavaFxObservable;
 
@@ -42,24 +44,39 @@ class GuestConfigViewJfx implements GuestConfigView {
     private HBox connectionBox;
 
     private final TextField hostnameField;
+
     private final Button connectButton;
+    private final Button disconnectButton;
+    private final int connectionButtonLocation;
 
     private final int initialConnectionBoxChildCount;
 
+    private final int connectionButtonWidth = 75;
+
+    private final Logger logger = LogManager.getLogger();
+
     public GuestConfigViewJfx() {
         pane = new VBox(20);
-//        pane.setPadding(new Insets(10));
 
         connectionBox = new HBox(10);
         connectionBox.setAlignment(Pos.CENTER_LEFT);
+
         Label hostnameLabel = new Label("Hostname");
         hostnameLabel.setMinWidth(55);
+
         hostnameField = new TextField("127.0.0.1");
-        connectButton = new Button("Connect");
-        connectButton.setMinWidth(60);
-        connectionBox.getChildren().addAll(hostnameLabel, hostnameField, connectButton);
         HBox.setHgrow(hostnameField, Priority.ALWAYS);
+
+        connectButton = new Button("Connect");
+        connectButton.setMinWidth(connectionButtonWidth);
+
+        connectionBox.getChildren().addAll(hostnameLabel, hostnameField, connectButton);
+
         initialConnectionBoxChildCount = connectionBox.getChildren().size();
+        connectionButtonLocation = initialConnectionBoxChildCount - 1;
+
+        disconnectButton = new Button("Disconnect");
+        disconnectButton.setMinWidth(connectionButtonWidth);
 
         pane.getChildren().clear();
         pane.getChildren().add(connectionBox);
@@ -78,6 +95,15 @@ class GuestConfigViewJfx implements GuestConfigView {
     @Override
     public Observable<ActionEvent> connectButtonObservable() {
         return JavaFxObservable.fromNodeEvents(connectButton, ActionEvent.ACTION);
+    }
+
+    @Override
+    public Observable<ActionEvent> disconnectButtonObservable() {
+        return JavaFxObservable.fromNodeEvents(disconnectButton, ActionEvent.ACTION)
+                .map(event -> {
+                    logger.debug("disconnect button pressed (map)");
+                    return event;
+                });
     }
 
     @Override
@@ -103,6 +129,36 @@ class GuestConfigViewJfx implements GuestConfigView {
         Platform.runLater(() -> setExtraConnectionBoxImage("error.png", errorMessage));
     }
 
+    @Override
+    public void setConnectionButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> {
+            connectButton.setDisable(disabled);
+            disconnectButton.setDisable(disabled);
+        });
+
+    }
+
+    @Override
+    public void showConnectButton() {
+        Platform.runLater(() -> {
+            connectionBox.getChildren().remove(disconnectButton);
+            connectionBox.getChildren().add(connectionButtonLocation, connectButton);
+        });
+    }
+
+    @Override
+    public void showDisconnectButton() {
+        Platform.runLater(() -> {
+            connectionBox.getChildren().remove(connectButton);
+            connectionBox.getChildren().add(connectionButtonLocation, disconnectButton);
+        });
+    }
+
+    @Override
+    public void removeExtraConnectionBoxItem() {
+        Platform.runLater(this::removeExtraConnectionBoxItemInternal);
+    }
+
     private void setExtraConnectionBoxImage(String filename, String tooltipMessage) {
         ImageView imageView = new ImageView(filename);
         imageView.setFitHeight(connectionBox.getHeight());
@@ -115,12 +171,15 @@ class GuestConfigViewJfx implements GuestConfigView {
     }
 
     private void setExtraConnectionBoxItem(Node node) {
+        removeExtraConnectionBoxItem();
+        connectionBox.getChildren().add(initialConnectionBoxChildCount, node);
+    }
+
+    private void removeExtraConnectionBoxItemInternal() {
         try {
             connectionBox.getChildren().remove(initialConnectionBoxChildCount);
         } catch (IndexOutOfBoundsException e) {
             // We're removing the extra item from the connectionBox. If it doesn't exist, no harm done.
         }
-
-        connectionBox.getChildren().add(initialConnectionBoxChildCount, node);
     }
 }

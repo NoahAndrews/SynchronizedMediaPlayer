@@ -45,9 +45,7 @@ public class MainApplication extends Application {
 
     public void exit() {
         System.out.println("Exiting...");
-        /*if (mediaPlayer != null) {
-            mediaPlayer.dispose();
-        }*/
+        applicationComponent.mediaService().tearDown();
         applicationComponent.mainViewPresenter().close();
         applicationComponent.networkConfigPresenter().close();
     }

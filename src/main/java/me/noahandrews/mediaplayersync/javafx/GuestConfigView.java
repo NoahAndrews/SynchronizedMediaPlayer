@@ -34,9 +34,19 @@ public interface GuestConfigView {
 
     Observable<ActionEvent> connectButtonObservable();
 
+    Observable<ActionEvent> disconnectButtonObservable();
+
     void showSpinner();
 
     void showSuccess();
 
     void showError(String message);
+
+    void setConnectionButtonDisabled(boolean disabled);
+
+    void showConnectButton();
+
+    void showDisconnectButton();
+
+    void removeExtraConnectionBoxItem();
 }

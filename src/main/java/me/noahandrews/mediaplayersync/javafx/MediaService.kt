@@ -4,7 +4,9 @@ import me.noahandrews.savpp.MediaSynchronizationClient
 import me.noahandrews.savpp.MediaSynchronizationServer
 import me.noahandrews.savpp.MediaSynchronizer
 import org.apache.logging.log4j.LogManager
-import rx.Completable
+import rx.Observable
+import rx.Single
+import rx.subjects.BehaviorSubject
 import java.io.File
 import java.net.URI
 import java.security.MessageDigest
@@ -62,24 +64,53 @@ class MediaService(
         }
     }
 
-    fun establishConnectionAsGuest(hostname: String): Completable {
-        //TODO: We need to make sure any old network objects and media players get torn down when a new connection is established.
-        return Completable.fromAction {
-            logger.info("Attempting to connect to server at $hostname")
+    fun establishConnectionAsGuest(hostname: String): Single<Void> =
+            Single.fromCallable({
+                logger.info("Attempting to connect to server at $hostname")
 
-            mediaSynchronizer = mediaSynchronizationClientProvider.getMediaSynchronizationClient(hostname)
-            (mediaSynchronizer as MediaSynchronizationClient).connect(getMd5Hash())
-        }
-    }
+                mediaSynchronizer?.tearDown()
+                mediaSynchronizer = mediaSynchronizationClientProvider.getMediaSynchronizationClient(hostname)
+                (mediaSynchronizer as MediaSynchronizationClient).connect(getMd5Hash())
+                logger.info("Connection made.")
+                null
+            })
 
-    fun establishConnectionAsHost(): Completable {
+    fun establishConnectionAsHost(): Observable<String> {
         //TODO: We need to make sure any old network objects and media players get torn down when a new server is established.
-        return Completable.fromAction {
-            logger.info("Attempting to start server")
+        logger.info("Attempting to start server")
 
-            mediaSynchronizer = mediaSynchronizationServerProvider.getMediaSynchronizationServer(getMd5Hash())
-            (mediaSynchronizer as MediaSynchronizationServer).startListening()
-        }
+        mediaSynchronizer = mediaSynchronizationServerProvider.getMediaSynchronizationServer(getMd5Hash())
+        val server: MediaSynchronizationServer = mediaSynchronizer as MediaSynchronizationServer
+
+        val serverStatusSubject = BehaviorSubject.create<String>().toSerialized()
+
+        server.setEventHandler(object : MediaSynchronizationServer.EventHandler() {
+            override fun serverStarted() {
+                serverStatusSubject.onNext("Listening for connections.")
+            }
+
+            override fun connectionRequested(identifier: String?): Boolean {
+                serverStatusSubject.onNext("Incoming connection")
+                return true //TODO: If we want the user to be able to approve incoming connections, this is where we change that
+            }
+
+            override fun timestampRequested(): Int {
+                if (mediaPlayer == null) {
+                    throw RuntimeException("Timestamp unavailable.")
+                }
+                return mediaPlayer!!.currentTimeMs
+            }
+
+            override fun connectionEstablished() {
+                serverStatusSubject.onNext("Connection established")
+            }
+
+            override fun incorrectMD5HashReceived(receivedHash: String?) {
+                serverStatusSubject.onNext("Connection failed due to an MD5 hash that didn't match.")
+            }
+        })
+        server.startListening()
+        return serverStatusSubject
     }
 
     fun play() {
@@ -98,7 +129,6 @@ class MediaService(
             val ms = percentToMs(positionPercent)
             eventHandler?.onPlaybackAdvanced(ms)
         }
-
     }
 
     fun setVolumePercentage(volume: Double) {
@@ -107,6 +137,15 @@ class MediaService(
 
     fun setEventHandler(eventHandler: EventHandler) {
         this.eventHandler = eventHandler
+    }
+
+    fun tearDown() {
+        mediaPlayer?.dispose()
+        tearDownNetworkConnection()
+    }
+
+    fun tearDownNetworkConnection() {
+        mediaSynchronizer?.tearDown()
     }
 
     private fun percentToMs(percent: Double): Int {

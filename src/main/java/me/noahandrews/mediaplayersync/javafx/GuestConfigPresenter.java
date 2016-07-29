@@ -41,16 +41,30 @@ public class GuestConfigPresenter {
         guestConfigView.connectButtonObservable()
                 .observeOn(Schedulers.io())
                 .flatMap(event -> {
-                    logger.debug("connect button clicked");
                     guestConfigView.showSpinner();
+                    guestConfigView.setConnectionButtonDisabled(true);
                     return mediaService.establishConnectionAsGuest(guestConfigView.getHostname()).toObservable();
                 })
                 .retry((retries, error) -> {
-                    guestConfigView.showError(error.getMessage());
                     error.printStackTrace();
+                    guestConfigView.showError(error.getMessage());
+                    guestConfigView.setConnectionButtonDisabled(false);
                     return true;
                 })
-                .subscribe(v -> guestConfigView.showSuccess());
+                .subscribe(v -> {
+                    guestConfigView.showSuccess();
+                    guestConfigView.setConnectionButtonDisabled(false);
+                    guestConfigView.showDisconnectButton();
+                }, Throwable::printStackTrace);
+
+        guestConfigView.disconnectButtonObservable()
+                .observeOn(Schedulers.io())
+                .subscribe(event -> {
+                    logger.debug("disconnect button pressed (subscribe)");
+                    mediaService.tearDownNetworkConnection();
+                    guestConfigView.removeExtraConnectionBoxItem();
+                    guestConfigView.showConnectButton();
+                });
     }
 
     public Pane getPane() {

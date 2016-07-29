@@ -51,7 +51,7 @@ public class NetworkConfigViewJfx implements NetworkConfigView {
         vBox.getChildren().add(modeSelectorView.getJfxView());
         vBox.setAlignment(Pos.TOP_CENTER);
         vBox.setPadding(new Insets(10));
-        Scene scene = new Scene(vBox, WIDTH, 60);
+        Scene scene = new Scene(vBox, WIDTH, 150); //TODO: Hard-coding such a high value results in an ugly interface
         stage.setScene(scene);
     }
 
@@ -81,10 +81,12 @@ public class NetworkConfigViewJfx implements NetworkConfigView {
     @Override
     public void show() {
         stage.show();
+        toFront();
     }
 
     @Override
     public void toFront() {
+        stage.setIconified(false);
         stage.toFront();
     }
 

@@ -1,6 +1,8 @@
 package me.noahandrews.mediaplayersync.javafx;
 
+import javafx.event.ActionEvent;
 import javafx.scene.layout.Pane;
+import rx.Observable;
 
 /**
  * MIT License
@@ -28,4 +30,10 @@ import javafx.scene.layout.Pane;
 
 public interface HostConfigView {
     Pane getPane();
+
+    Observable<ActionEvent> getServerButtonObservable();
+
+    void setServerButtonText(String text);
+
+    void setServerStatusText(String text);
 }

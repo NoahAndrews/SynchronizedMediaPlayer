@@ -1,8 +1,13 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import javafx.geometry.Insets;
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import rx.Observable;
+import rx.observables.JavaFxObservable;
 
 /*
  * MIT License
@@ -31,13 +36,38 @@ import javafx.scene.layout.VBox;
 class HostConfigViewJfx implements HostConfigView {
     private VBox pane;
 
+    private final Button serverButton;
+    private final Label serverStatusLabel;
+
     public HostConfigViewJfx() {
         pane = new VBox(20);
-        pane.setPadding(new Insets(20));
+        pane.setAlignment(Pos.CENTER);
+
+        serverButton = new Button("Start Server");
+
+        serverStatusLabel = new Label("");
+        serverStatusLabel.setAlignment(Pos.CENTER);
+
+        pane.getChildren().addAll(serverButton, serverStatusLabel);
     }
 
     @Override
     public Pane getPane() {
         return pane;
+    }
+
+    @Override
+    public Observable<ActionEvent> getServerButtonObservable() {
+        return JavaFxObservable.fromNodeEvents(serverButton, ActionEvent.ACTION);
+    }
+
+    @Override
+    public void setServerButtonText(String text) {
+        serverButton.setText(text);
+    }
+
+    @Override
+    public void setServerStatusText(String text) {
+        serverStatusLabel.setText(text);
     }
 }

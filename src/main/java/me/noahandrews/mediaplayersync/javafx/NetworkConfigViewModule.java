@@ -63,8 +63,8 @@ class NetworkConfigViewModule {
 
     @Provides
     @Singleton
-    static HostConfigPresenter provideHostConfigPresenter(HostConfigView view) {
-        return new HostConfigPresenter(view);
+    static HostConfigPresenter provideHostConfigPresenter(HostConfigView view, MediaService mediaService) {
+        return new HostConfigPresenter(view, mediaService);
     }
 
     @Provides

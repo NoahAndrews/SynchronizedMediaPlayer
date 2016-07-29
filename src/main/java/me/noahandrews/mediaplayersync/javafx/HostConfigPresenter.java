@@ -1,6 +1,12 @@
 package me.noahandrews.mediaplayersync.javafx;
 
 import javafx.scene.layout.Pane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import rx.schedulers.JavaFxScheduler;
+
+import static me.noahandrews.mediaplayersync.javafx.HostConfigPresenter.ServerButtonState.START_SERVER;
+import static me.noahandrews.mediaplayersync.javafx.HostConfigPresenter.ServerButtonState.STOP_SERVER;
 
 /**
  * MIT License
@@ -27,13 +33,37 @@ import javafx.scene.layout.Pane;
  */
 
 public class HostConfigPresenter {
-    private HostConfigView hostConfigView;
+    private final HostConfigView hostConfigView;
+    private final MediaService mediaService;
+    private final Logger logger = LogManager.getLogger();
+    private ServerButtonState serverButtonState = START_SERVER;
 
-    public HostConfigPresenter(HostConfigView hostConfigView) {
+    public HostConfigPresenter(HostConfigView hostConfigView, MediaService mediaService) {
+
         this.hostConfigView = hostConfigView;
+        this.mediaService = mediaService;
+
+        hostConfigView.getServerButtonObservable().subscribe(event -> {
+            if (serverButtonState == START_SERVER) {
+                mediaService.establishConnectionAsHost()
+                        .observeOn(JavaFxScheduler.getInstance())
+                        .subscribe(hostConfigView::setServerStatusText);
+                hostConfigView.setServerButtonText("Stop Server");
+                serverButtonState = STOP_SERVER;
+            } else if (serverButtonState == STOP_SERVER) {
+                mediaService.tearDownNetworkConnection();
+                hostConfigView.setServerButtonText("Start Server");
+                serverButtonState = START_SERVER;
+            }
+        });
     }
 
     public Pane getPane() {
         return hostConfigView.getPane();
+    }
+
+    enum ServerButtonState {
+        START_SERVER,
+        STOP_SERVER
     }
 }
