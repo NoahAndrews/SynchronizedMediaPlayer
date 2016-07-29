@@ -108,7 +108,9 @@ class GuestConfigViewJfx implements GuestConfigView {
 
     @Override
     public void showSpinner() {
+        logger.debug("showSpinner called");
         Platform.runLater(() -> {
+            logger.debug("showing the spinner");
             ProgressIndicator spinner = new ProgressIndicator();
             spinner.setProgress(-1);
             spinner.setMinHeight(connectionBox.getHeight());
@@ -171,7 +173,7 @@ class GuestConfigViewJfx implements GuestConfigView {
     }
 
     private void setExtraConnectionBoxItem(Node node) {
-        removeExtraConnectionBoxItem();
+        removeExtraConnectionBoxItemInternal();
         connectionBox.getChildren().add(initialConnectionBoxChildCount, node);
     }
 
