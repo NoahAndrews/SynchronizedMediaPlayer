@@ -1,9 +1,8 @@
 package me.noahandrews.mediaplayersync.javafx;
 
-import dagger.Module;
-import dagger.Provides;
-
-import javax.inject.Singleton;
+import me.noahandrews.savpp.MediaSynchronizationServer;
+import me.noahandrews.savpp.SAVPPServer;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * MIT License
@@ -29,29 +28,10 @@ import javax.inject.Singleton;
  * SOFTWARE.
  */
 
-@Module
-public class MediaModule {
-
-    @Provides
-    @Singleton
-    public FileProvider provideFileProvider() {
-        return new MediaFileProviderJfx();
-    }
-
-    @Provides
-    @Singleton
-    public MediaService provideMediaService(
-            FileProvider fileProvider,
-            MediaPlayerProvider mediaPlayerProvider,
-            MediaSynchronizationClientProvider mediaSynchronizationClientProvider,
-            MediaSynchronizationServerProvider mediaSynchronizationServerProvider
-    ) {
-        return new MediaService(fileProvider, mediaPlayerProvider, mediaSynchronizationClientProvider, mediaSynchronizationServerProvider);
-    }
-
-    @Provides
-    @Singleton
-    public MediaPlayerProvider provideMediaPlayerProvider() {
-        return new MediaPlayerProviderJfx();
+public class MediaSynchronizationServerProviderSavpp implements MediaSynchronizationServerProvider {
+    @NotNull
+    @Override
+    public MediaSynchronizationServer getMediaSynchronizationServer(@NotNull String md5Hash) {
+        return new SAVPPServer(md5Hash);
     }
 }

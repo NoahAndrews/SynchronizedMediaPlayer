@@ -1,6 +1,7 @@
 package me.noahandrews.mediaplayersync.javafx
 
 import me.noahandrews.savpp.MediaSynchronizationClient
+import me.noahandrews.savpp.MediaSynchronizationServer
 import me.noahandrews.savpp.MediaSynchronizer
 import org.apache.logging.log4j.LogManager
 import rx.Completable
@@ -37,7 +38,12 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter
  * SOFTWARE.
  */
 
-class MediaService(private val fileProvider: FileProvider, private val mediaPlayerProvider: MediaPlayerProvider, private val mediaSynchronizationClientProvider: MediaSynchronizationClientProvider) {
+class MediaService(
+        private val fileProvider: FileProvider,
+        private val mediaPlayerProvider: MediaPlayerProvider,
+        private val mediaSynchronizationClientProvider: MediaSynchronizationClientProvider,
+        private val mediaSynchronizationServerProvider: MediaSynchronizationServerProvider
+) {
     private var mediaPlayer: MediaPlayer? = null
     private var eventHandler: EventHandler? = null
     private var mediaSynchronizer: MediaSynchronizer? = null
@@ -60,20 +66,19 @@ class MediaService(private val fileProvider: FileProvider, private val mediaPlay
         //TODO: We need to make sure any old network objects and media players get torn down when a new connection is established.
         return Completable.fromAction {
             logger.info("Attempting to connect to server at $hostname")
-            if (mediaPlayer == null) {
-                throw IllegalStateException("No media file has been loaded.")
-            }
-            val mediaUri = URI(mediaPlayer!!.mediaUri)
-            val mediaFileBytes = File(mediaUri).readBytes()
-            val messageDigest = MessageDigest.getInstance("MD5")
-            val md5Bytes = messageDigest.digest(mediaFileBytes) //TODO: If a file is really large, readBytes should be avoided.
-            val md5String = HexBinaryAdapter().marshal(md5Bytes)
-
-            logger.info("MD5 hash: $md5String")
-
 
             mediaSynchronizer = mediaSynchronizationClientProvider.getMediaSynchronizationClient(hostname)
-            (mediaSynchronizer as MediaSynchronizationClient).connect(md5String)
+            (mediaSynchronizer as MediaSynchronizationClient).connect(getMd5Hash())
+        }
+    }
+
+    fun establishConnectionAsHost(): Completable {
+        //TODO: We need to make sure any old network objects and media players get torn down when a new server is established.
+        return Completable.fromAction {
+            logger.info("Attempting to start server")
+
+            mediaSynchronizer = mediaSynchronizationServerProvider.getMediaSynchronizationServer(getMd5Hash())
+            (mediaSynchronizer as MediaSynchronizationServer).startListening()
         }
     }
 
@@ -96,11 +101,6 @@ class MediaService(private val fileProvider: FileProvider, private val mediaPlay
 
     }
 
-    private fun percentToMs(percent: Double): Int {
-        val duration = mediaPlayer?.durationMs ?: 0
-        return ((percent / 100.0) * duration).toInt()
-    }
-
     fun setVolumePercentage(volume: Double) {
         mediaPlayer?.setVolumePercent(volume)
     }
@@ -109,6 +109,25 @@ class MediaService(private val fileProvider: FileProvider, private val mediaPlay
         this.eventHandler = eventHandler
     }
 
+    private fun percentToMs(percent: Double): Int {
+        val duration = mediaPlayer?.durationMs ?: 0
+        return ((percent / 100.0) * duration).toInt()
+    }
+
+    private fun getMd5Hash(): String {
+        if (mediaPlayer == null) {
+            throw IllegalStateException("No media file has been loaded.")
+        }
+        val mediaUri = URI(mediaPlayer!!.mediaUri)
+        val mediaFileBytes = File(mediaUri).readBytes()
+        val messageDigest = MessageDigest.getInstance("MD5")
+        val md5Bytes = messageDigest.digest(mediaFileBytes) //TODO: If a file is really large, readBytes should be avoided.
+        val md5String = HexBinaryAdapter().marshal(md5Bytes)
+
+        logger.info("MD5 hash: $md5String")
+
+        return md5String
+    }
 
     private fun setupMediaPlayerSubscriptions(mediaPlayer: MediaPlayer) {
         mediaPlayer.statusObservable()
@@ -134,4 +153,3 @@ class MediaService(private val fileProvider: FileProvider, private val mediaPlay
         fun onPlaybackAdvanced(ms: Int): Unit
     }
 }
-

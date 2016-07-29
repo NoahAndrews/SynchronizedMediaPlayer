@@ -36,4 +36,10 @@ public class MediaSynchronizationModule {
     public MediaSynchronizationClientProvider provideMediaSynchronizationClientProvider() {
         return new MediaSynchronizationClientProviderSavpp();
     }
+
+    @Provides
+    @Singleton
+    public MediaSynchronizationServerProvider provideMediaSynchronizationServerProvider() {
+        return new MediaSynchronizationServerProviderSavpp();
+    }
 }
