@@ -3,6 +3,7 @@ package me.noahandrews.mediaplayersync.javafx;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -88,40 +89,38 @@ class GuestConfigViewJfx implements GuestConfigView {
             spinner.setMaxHeight(connectionBox.getHeight());
             spinner.setMaxWidth(connectionBox.getHeight());
             spinner.setMinWidth(connectionBox.getHeight());
-            removeExtraConnectionBoxItem();
-            connectionBox.getChildren().add(initialConnectionBoxChildCount, spinner);
+            setExtraConnectionBoxItem(spinner);
         });
     }
 
     @Override
     public void showSuccess() {
-        Platform.runLater(() -> {
-            ImageView imageView = new ImageView("success.png");
-            imageView.setFitHeight(connectionBox.getHeight());
-            imageView.setPreserveRatio(true);
-            removeExtraConnectionBoxItem();
-            connectionBox.getChildren().add(initialConnectionBoxChildCount, imageView);
-        });
+        Platform.runLater(() -> setExtraConnectionBoxImage("success.png", null));
     }
 
     @Override
-    public void showError(String message) {
-        Platform.runLater(() -> {
-            ImageView imageView = new ImageView("error.png");
-            imageView.setFitHeight(connectionBox.getHeight());
-            imageView.setPreserveRatio(true);
-            Tooltip errorTooltip = new Tooltip(message);
-            Tooltip.install(imageView, errorTooltip);
-            removeExtraConnectionBoxItem();
-            connectionBox.getChildren().add(initialConnectionBoxChildCount, imageView);
-        });
+    public void showError(String errorMessage) {
+        Platform.runLater(() -> setExtraConnectionBoxImage("error.png", errorMessage));
     }
 
-    private void removeExtraConnectionBoxItem() {
+    private void setExtraConnectionBoxImage(String filename, String tooltipMessage) {
+        ImageView imageView = new ImageView(filename);
+        imageView.setFitHeight(connectionBox.getHeight());
+        imageView.setPreserveRatio(true);
+        if (tooltipMessage != null) {
+            Tooltip tooltip = new Tooltip(tooltipMessage);
+            Tooltip.install(imageView, tooltip);
+        }
+        setExtraConnectionBoxItem(imageView);
+    }
+
+    private void setExtraConnectionBoxItem(Node node) {
         try {
             connectionBox.getChildren().remove(initialConnectionBoxChildCount);
         } catch (IndexOutOfBoundsException e) {
-            // We're removing the 4th item from the connectionBox. If it doesn't exist, no harm done.
+            // We're removing the extra item from the connectionBox. If it doesn't exist, no harm done.
         }
+
+        connectionBox.getChildren().add(initialConnectionBoxChildCount, node);
     }
 }
