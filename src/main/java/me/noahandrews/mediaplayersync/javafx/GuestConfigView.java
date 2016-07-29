@@ -33,4 +33,10 @@ public interface GuestConfigView {
     String getHostname();
 
     Observable<ActionEvent> connectButtonObservable();
+
+    void showSpinner();
+
+    void showSuccess();
+
+    void showError(String message);
 }

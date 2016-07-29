@@ -42,7 +42,7 @@ public class NetworkConfigViewJfx implements NetworkConfigView {
 
     public NetworkConfigViewJfx() {
         stage = new Stage();
-        vBox = new VBox();
+        vBox = new VBox(15);
 
         stage.setTitle("Network Configuration");
         stage.setResizable(false);

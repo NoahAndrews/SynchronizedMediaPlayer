@@ -1,13 +1,13 @@
 package me.noahandrews.mediaplayersync.javafx;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import rx.Observable;
 import rx.observables.JavaFxObservable;
@@ -43,15 +43,22 @@ class GuestConfigViewJfx implements GuestConfigView {
     private final TextField hostnameField;
     private final Button connectButton;
 
+    private final int initialConnectionBoxChildCount;
+
     public GuestConfigViewJfx() {
         pane = new VBox(20);
-        pane.setPadding(new Insets(10));
+//        pane.setPadding(new Insets(10));
 
         connectionBox = new HBox(10);
         connectionBox.setAlignment(Pos.CENTER_LEFT);
+        Label hostnameLabel = new Label("Hostname");
+        hostnameLabel.setMinWidth(55);
         hostnameField = new TextField("127.0.0.1");
         connectButton = new Button("Connect");
-        connectionBox.getChildren().addAll(new Label("Hostname"), hostnameField, connectButton);
+        connectButton.setMinWidth(60);
+        connectionBox.getChildren().addAll(hostnameLabel, hostnameField, connectButton);
+        HBox.setHgrow(hostnameField, Priority.ALWAYS);
+        initialConnectionBoxChildCount = connectionBox.getChildren().size();
 
         pane.getChildren().clear();
         pane.getChildren().add(connectionBox);
@@ -70,5 +77,51 @@ class GuestConfigViewJfx implements GuestConfigView {
     @Override
     public Observable<ActionEvent> connectButtonObservable() {
         return JavaFxObservable.fromNodeEvents(connectButton, ActionEvent.ACTION);
+    }
+
+    @Override
+    public void showSpinner() {
+        Platform.runLater(() -> {
+            ProgressIndicator spinner = new ProgressIndicator();
+            spinner.setProgress(-1);
+            spinner.setMinHeight(connectionBox.getHeight());
+            spinner.setMaxHeight(connectionBox.getHeight());
+            spinner.setMaxWidth(connectionBox.getHeight());
+            spinner.setMinWidth(connectionBox.getHeight());
+            removeExtraConnectionBoxItem();
+            connectionBox.getChildren().add(initialConnectionBoxChildCount, spinner);
+        });
+    }
+
+    @Override
+    public void showSuccess() {
+        Platform.runLater(() -> {
+            ImageView imageView = new ImageView("success.png");
+            imageView.setFitHeight(connectionBox.getHeight());
+            imageView.setPreserveRatio(true);
+            removeExtraConnectionBoxItem();
+            connectionBox.getChildren().add(initialConnectionBoxChildCount, imageView);
+        });
+    }
+
+    @Override
+    public void showError(String message) {
+        Platform.runLater(() -> {
+            ImageView imageView = new ImageView("error.png");
+            imageView.setFitHeight(connectionBox.getHeight());
+            imageView.setPreserveRatio(true);
+            Tooltip errorTooltip = new Tooltip(message);
+            Tooltip.install(imageView, errorTooltip);
+            removeExtraConnectionBoxItem();
+            connectionBox.getChildren().add(initialConnectionBoxChildCount, imageView);
+        });
+    }
+
+    private void removeExtraConnectionBoxItem() {
+        try {
+            connectionBox.getChildren().remove(initialConnectionBoxChildCount);
+        } catch (IndexOutOfBoundsException e) {
+            // We're removing the 4th item from the connectionBox. If it doesn't exist, no harm done.
+        }
     }
 }

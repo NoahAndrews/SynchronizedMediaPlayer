@@ -3,6 +3,7 @@ package me.noahandrews.mediaplayersync.javafx
 import me.noahandrews.savpp.MediaSynchronizationClient
 import me.noahandrews.savpp.MediaSynchronizer
 import org.apache.logging.log4j.LogManager
+import rx.Completable
 import java.io.File
 import java.net.URI
 import java.security.MessageDigest
@@ -55,21 +56,25 @@ class MediaService(private val fileProvider: FileProvider, private val mediaPlay
         }
     }
 
-    fun establishConnectionAsGuest(hostname: String) {
+    fun establishConnectionAsGuest(hostname: String): Completable {
         //TODO: We need to make sure any old network objects and media players get torn down when a new connection is established.
-        if (mediaPlayer == null) {
-            throw IllegalStateException("No media file has been loaded.")
+        return Completable.fromAction {
+            logger.info("Attempting to connect to server at $hostname")
+            if (mediaPlayer == null) {
+                throw IllegalStateException("No media file has been loaded.")
+            }
+            val mediaUri = URI(mediaPlayer!!.mediaUri)
+            val mediaFileBytes = File(mediaUri).readBytes()
+            val messageDigest = MessageDigest.getInstance("MD5")
+            val md5Bytes = messageDigest.digest(mediaFileBytes) //TODO: If a file is really large, readBytes should be avoided.
+            val md5String = HexBinaryAdapter().marshal(md5Bytes)
+
+            logger.info("MD5 hash: $md5String")
+
+
+            mediaSynchronizer = mediaSynchronizationClientProvider.getMediaSynchronizationClient(hostname)
+            (mediaSynchronizer as MediaSynchronizationClient).connect(md5String)
         }
-        val mediaUri = URI(mediaPlayer!!.mediaUri)
-        val mediaFileBytes = File(mediaUri).readBytes()
-        val messageDigest = MessageDigest.getInstance("MD5")
-        val md5Bytes = messageDigest.digest(mediaFileBytes) //TODO: If a file is really large, readBytes should be avoided.
-        val md5String = HexBinaryAdapter().marshal(md5Bytes)
-
-        logger.info("MD5 hash: $md5String")
-
-        mediaSynchronizer = mediaSynchronizationClientProvider.getMediaSynchronizationClient(hostname)
-        (mediaSynchronizer as MediaSynchronizationClient).connect(md5String)
     }
 
     fun play() {

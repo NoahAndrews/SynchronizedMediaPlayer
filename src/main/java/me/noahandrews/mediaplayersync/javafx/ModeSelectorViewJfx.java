@@ -31,8 +31,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 class ModeSelectorViewJfx implements ModeSelectorView {
     private HBox hBox;
@@ -42,7 +42,6 @@ class ModeSelectorViewJfx implements ModeSelectorView {
     public ModeSelectorViewJfx() {
         hBox = new HBox(25);
         hBox.setMaxHeight(40);
-        hBox.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         hBox.setAlignment(Pos.CENTER_LEFT);
 
         Label modeLabel = new Label("Mode:");

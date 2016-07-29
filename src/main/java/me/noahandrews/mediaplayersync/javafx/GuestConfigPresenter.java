@@ -1,6 +1,9 @@
 package me.noahandrews.mediaplayersync.javafx;
 
 import javafx.scene.layout.Pane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import rx.schedulers.Schedulers;
 
 /**
  * MIT License
@@ -29,14 +32,25 @@ import javafx.scene.layout.Pane;
 public class GuestConfigPresenter {
     private GuestConfigView guestConfigView;
     private MediaService mediaService;
+    private Logger logger = LogManager.getLogger();
 
     public GuestConfigPresenter(GuestConfigView guestConfigView, MediaService mediaService) {
         this.guestConfigView = guestConfigView;
         this.mediaService = mediaService;
 
-        guestConfigView.connectButtonObservable().subscribe(event -> {
-            mediaService.establishConnectionAsGuest(guestConfigView.getHostname());
-        });
+        guestConfigView.connectButtonObservable()
+                .observeOn(Schedulers.io())
+                .flatMap(event -> {
+                    logger.debug("connect button clicked");
+                    guestConfigView.showSpinner();
+                    return mediaService.establishConnectionAsGuest(guestConfigView.getHostname()).toObservable();
+                })
+                .retry((retries, error) -> {
+                    guestConfigView.showError(error.getMessage());
+                    error.printStackTrace();
+                    return true;
+                })
+                .subscribe(v -> guestConfigView.showSuccess());
     }
 
     public Pane getPane() {
