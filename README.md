@@ -1,5 +1,5 @@
-# This project is being reworked as an Android app called DolphinPod. 
-This version of the project will likely not be revisited in the future.
+# ~~This project is being reworked as an Android app called DolphinPod.~~
+This version of the project will likely not be revisited in the future. DolphinPod will probably not happen either.
 
 # Synchronized Audio Player
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/NoahAndrews/SynchronizedMediaPlayer/master/LICENSE.txt)
